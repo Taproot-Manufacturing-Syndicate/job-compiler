@@ -1,0 +1,158 @@
+[[step.0.inputs]]
+name = "bearing_hub_top"
+type = "printed"
+model = "https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/bearing-hub-top.STL"
+
+[[step.0.inputs]]
+name = "bearing_hub"
+type = "printed"
+model = "https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/bearing-hub.STL"
+
+[[step.0.inputs]]
+type = "M4x20 SHCS"
+quantity = 3
+comment = """These will hold the bearing rollers.  Possibly Button Heads
+Cap Screws would be better?  Probably either will work fine."""
+
+[[step.0.inputs]]
+type = "M4 washer"
+quantity = 6
+dimensions = "12 mm OD, 4.4 mm ID, 1 mm thick"
+comment = """The upstream repo calls for 12 mm OD but i think that's
+too big, it hits the outer race of the bearings.  Use 8mm OD instead."""
+
+[[step.0.inputs]]
+type = "624 bearing"
+quantity = 6
+comments = "13mm OD, 4mm ID, 5mm wide"
+
+[[step.0.inputs]]
+type = "M4 nuts"
+quantity = 3
+
+[step.0]
+
+tools = [
+    "3 mm hex driver",
+    "7 mm nut driver",
+]
+
+process = """Assemble the bearing roller.  Each of the three roller
+stacks will consist of: washer, bearing, bearing, washer.  All three
+roller stacks are clamped between the bearing hub top and bottom, and
+fixed by a screw and nut."""
+
+output = "bearing_roller"
+
+
+[[step.1.inputs]]
+name = "pump_housing_rear_untapped"
+type = "printed"
+model = "https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/CheapPump.STL"
+
+[step.1]
+
+tools = [ "M4 tap" ]
+
+process = """Tap the two motor mounting holes."""
+
+output = "pump_housing_rear"
+
+
+[[step.2.inputs]]
+name = "pump_housing_rear"
+
+[[step.2.inputs]]
+type = "M4x5 SHCS"
+quantity = 2
+
+[[step.2.inputs]]
+type = "stepper, J8BYJ-48"
+info = [
+    "https://www.mouser.com/datasheet/2/758/stepd-01-data-sheet-1143075.pdf",
+    "https://components101.com/motors/28byj-48-stepper-motor",
+]
+
+[step.2]
+
+tools = [ "3 mm hex driver" ]
+
+process = """Screw the stepper to the printed rear housing."""
+
+output = "pump_housing_rear_with_stepper"
+
+
+[[step.3.inputs]]
+name = "pump_housing_front_untapped"
+type = "printed"
+model = "https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/pump-top.STL"
+
+[step.3]
+
+tools = [ "M4 tap" ]
+
+process = """Tap the two motor mounting holes."""
+
+output = "pump_housing_front"
+
+
+[[step.4.inputs]]
+name = "pump_housing_front"
+
+[[step.4.inputs]]
+type = "M4x5 SHCS"
+quantity = 2
+
+[[step.4.inputs]]
+type = "stepper, J8BYJ-48"
+
+[step.4]
+
+tools = [ "3 mm hex driver" ]
+
+process = """Screw the stepper to the printed front housing."""
+
+output = "pump_housing_front_with_stepper"
+
+
+[[step.5.inputs]]
+name = "pump_housing_front_with_stepper"
+
+[[step.5.inputs]]
+name = "bearing_roller"
+
+[[step.5.inputs]]
+type = "silicone tubing, 6mm OD, 4mm ID"
+quantity = "1 meter"
+comment = "PVC tube isn't flexible enough.  Adjust quantity to suit your application."
+
+[[step.5.inputs]]
+name = "pump_housing_rear_with_stepper"
+
+[[step.5.inputs]]
+name = "tube_support"
+type = "printed"
+model = "https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/tube-support.STL"
+
+[[step.5.inputs]]
+name = "m4_25_bhcs"
+type = "M4x25 BHCS"
+quantity = 4
+comment = """BHCS is preferred over SHCS so the screw heads sit recessed
+below the surface of the pump body."""
+
+[[step.5.inputs]]
+type = "M4 nuts"
+quantity = 4
+
+[step.5]
+
+tools = [ "3 mm hex driver" ]
+
+process = """Press the bearing roller assembly onto the motor shaft of the
+rear pump housing assembly.  Install the tubing so it goes in one port,
+around the roller, and out the other port.  Press the motor shaft of the
+front pump housing assembly into the other side of the bearing roller.
+Attach with the screws and nuts."""
+
+output = "peristaltic_pump"
