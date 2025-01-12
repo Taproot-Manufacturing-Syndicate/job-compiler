@@ -1,0 +1,12 @@
+
+[[outputs]]
+pump_housing_rear = {quantity=1}
+
+[[inputs]]
+pump_housing_rear_untapped = {version=0.1, type="printed", quantity=1, model="https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/CheapPump.STL"}
+
+[[dependencies]]
+tools = [ "M4 tap" ]
+
+[[action]]
+process = """Tap the two motor mounting holes."""

@@ -1,0 +1,14 @@
+[[outputs]]
+pump_housing_front_with_stepper={quantity=1}
+
+[[inputs]]
+pump_housing_front={version=0.1, quantity=1}
+m4_5_shcs={quantity=2, description="M4x5 SHCS"}
+stepper={quantity=1, type="J8ByJ-48"}
+
+[[dependencies]]
+tools = [ "3 mm hex driver" ]
+operator = {skill="assembly"}
+
+[[action]]
+process = """Screw the stepper to the printed front housing."""

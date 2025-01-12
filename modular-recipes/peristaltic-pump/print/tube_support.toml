@@ -1,0 +1,14 @@
+[[outputs]]
+tube_support={version=0.1, quantity=1, type="printed"}
+
+[[inputs]]
+filament={}
+
+[[dependencies]]
+printer={type="fdm"}
+
+[[config]]
+model="https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/tube-support.STL"
+
+[[action]]
+print={}

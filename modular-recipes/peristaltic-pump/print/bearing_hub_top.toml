@@ -1,0 +1,14 @@
+[[outputs]]
+bearing_hub_top={version=0.1, quantity=1, type="printed"}
+
+[[inputs]]
+filament={}
+
+[[dependencies]]
+printer={type="fdm"}
+
+[[config]]
+model="https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/bearing-hub-top.STL"
+
+[[action]]
+print={}

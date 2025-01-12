@@ -1,0 +1,14 @@
+
+[[outputs]]
+pump_housing_front={quantity=1}
+
+[[inputs]]
+pump_housing_front_untapped={version=0.1, type="printed"}
+
+[[dependencies]]
+tools = [ "M4 tap" ]
+operator = {skill="assembly"}
+
+[[action]]
+process = """Tap the two motor mounting holes."""
+

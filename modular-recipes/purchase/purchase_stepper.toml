@@ -1,0 +1,14 @@
+[[outputs]]
+stepper = {type="J8BYJ-48"}
+
+[[inputs]]
+capital={type="usd"}
+
+[[dependencies]]
+operator = {skill="vendor interaction"}
+
+[[action.purchase]]
+retailers = ["https://www.mouser.com/datasheet/2/758/stepd-01-data-sheet-1143075.pdf",
+            "https://components101.com/motors/28byj-48-stepper-motor"]
+
+process = "contact retailer and provide capital in exchange for vitamins. then think about how you can produce those vitamins for your enclave."
