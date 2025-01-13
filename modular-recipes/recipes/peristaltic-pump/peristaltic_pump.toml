@@ -1,8 +1,8 @@
 [inputs]
-pump_housing_front_with_stepper = {version = 0.1, quantity=1}
-bearing_roller = {version=0.1, quantity=1}
-pump_housing_rear_with_stepper = {version=0.1, quantity=1}
-tube_support = {version=0.1, quantity=1}
+pump_housing_front_with_stepper = {quantity=1}
+bearing_roller = {quantity=1}
+pump_housing_rear_with_stepper = {quantity=1}
+tube_support = {quantity=1}
 
 [inputs.silicone_tubing]
 type = "silicone tubing, 6mm OD, 4mm ID"
