@@ -1,0 +1,10 @@
+name = "r2"
+
+[inputs]
+r1_output = {}
+
+[outputs]
+
+[dependencies]
+
+[config]

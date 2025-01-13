@@ -1,0 +1,11 @@
+name = "r1"
+
+[inputs]
+
+[outputs]
+r1_output = {}
+
+[dependencies]
+dep_1 = {}
+
+[config]
