@@ -20,9 +20,9 @@ below the surface of the pump body."""
 type = "M4 nuts"
 quantity = 4
 
-[[dependencies]]
+[dependencies]
 tools = [ "3 mm hex driver" ]
-operator = {skill="assembly"}
+operator = { skills=["assembly"] }
 
 [[action]]
 process = """Press the bearing roller assembly onto the motor shaft of the
