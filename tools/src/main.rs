@@ -51,6 +51,13 @@ struct Recipe {
 
     dependencies: Dependencies,
     action: Action,
+
+    /// If a recipe has no `[outputs]`, we assume it produces 1x of the
+    /// thing identified by the name of the recipe.
+    ///
+    /// FIXME: Or is that always the case, and we should have no outputs
+    /// section?  None of the recipes we've been doodling around with
+    /// have anything like byproducts or waste streams...
     outputs: Option<Vec<String>>,
 }
 
