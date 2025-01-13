@@ -1,0 +1,9 @@
+[package]
+name = "recipe-loader"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "^4.5.26", features = ["derive"] }
+recipe = {path="../recipe"}
+toml = "0.8.19"
