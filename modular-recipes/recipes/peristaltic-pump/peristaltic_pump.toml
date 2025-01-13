@@ -24,7 +24,7 @@ quantity = 4
 tools = [ "3 mm hex driver" ]
 operator = { skills=["assembly"] }
 
-[[action]]
+[action]
 process = """Press the bearing roller assembly onto the motor shaft of the
 rear pump housing assembly.  Install the tubing so it goes in one port,
 around the roller, and out the other port.  Press the motor shaft of the
