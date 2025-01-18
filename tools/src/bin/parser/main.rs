@@ -17,12 +17,11 @@ struct Args {
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
-    let repo_contents = std::fs::read_dir(args.repo).unwrap();
+    let repo = Repo::new(&args.repo);
+    println!("{:#?}", repo);
 
-    let target_str = std::fs::read_to_string(args.target)?;
-    let recipe: Recipe = toml::from_str(&target_str)?;
+    let recipe: Option<&Recipe> = repo.get_recipe(&args.target);
     println!("{recipe:#?}");
-    let r = tools::recipe::validate_recipe(&recipe);
-    println!("valid?  {r:#?}");
+
     Ok(())
 }

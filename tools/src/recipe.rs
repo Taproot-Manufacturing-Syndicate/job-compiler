@@ -54,9 +54,18 @@ pub struct Recipe {
     outputs: Option<Vec<String>>,
 }
 
-pub fn validate_recipe(recipe: &Recipe) -> anyhow::Result<()> {
-    // if recipe.inputs.len() == 0 {
-    //     Err("recipe has no inputs!");
-    // }
-    Ok(())
+impl Recipe {
+    pub fn from_file(file: &std::path::PathBuf) -> anyhow::Result<Self> {
+        let recipe_contents = std::fs::read_to_string(file)?;
+        let recipe: Recipe = toml::from_str(&recipe_contents)?;
+        // let r = recipe.validate_recipe();
+        Ok(recipe)
+    }
+
+    fn validate_recipe(self: &Self) -> anyhow::Result<()> {
+        // if recipe.inputs.len() == 0 {
+        //     Err("recipe has no inputs!");
+        // }
+        Ok(())
+    }
 }
