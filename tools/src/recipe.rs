@@ -4,34 +4,30 @@
 //     Amount(String),
 // }
 
+#[derive(Clone, Copy, Debug, PartialEq, serde::Deserialize)]
+pub enum Unit {
+    USDollar,
+    Meter,
+    Gram,
+}
+
+/// `Quantity` measures the amount of a resource (Input or Output).
+#[derive(Clone, Copy, Debug, serde::Deserialize)]
+pub struct Quantity {
+    pub amount: f32,
+    pub unit: Option<Unit>,
+}
+
 #[derive(Debug, serde::Deserialize)]
 pub struct Input {
-    /// Each input has either a `quantity` (for discrete things, like
-    /// apples or bearings) or an `amount` (for continuous things,
-    /// like rope or flour).
-    ///
-    /// FIXME: Is there a good way to handle the "units" of the
-    /// quantity/amount? Maybe the units could default to "count", but
-    /// be optionally overridden by the recipe to things like "meters"
-    /// (of tubing) or "grams" (of chromic acid).  Then this struct
-    /// would be `quantity: usize, units: Option<Unit>`.
-    pub quantity: Option<usize>,
-    pub amount: Option<String>,
+    // Quantity defaults to "amount=1" if omitted.
+    pub quantity: Option<Quantity>,
 }
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Output {
-    /// Each output has either a `quantity` (for discrete things, like
-    /// apples or bearings) or an `amount` (for continuous things,
-    /// like rope or flour).
-    ///
-    /// FIXME: Is there a good way to handle the "units" of the
-    /// quantity/amount? Maybe the units could default to "count", but
-    /// be optionally overridden by the recipe to things like "meters"
-    /// (of tubing) or "grams" (of chromic acid).  Then this struct
-    /// would be `quantity: usize, units: Option<Unit>`.
-    pub quantity: Option<usize>,
-    pub amount: Option<String>,
+    // Quantity defaults to "amount=1" if omitted.
+    pub quantity: Option<Quantity>,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -77,6 +73,30 @@ pub struct Recipe {
     pub outputs: Option<std::collections::HashMap<String, Output>>,
 }
 
+impl Input {
+    pub fn get_quantity(&self) -> Quantity {
+        match &self.quantity {
+            None => Quantity {
+                amount: 1.0,
+                unit: None,
+            },
+            Some(q) => q.clone(),
+        }
+    }
+}
+
+impl Output {
+    pub fn get_quantity(&self) -> Quantity {
+        match &self.quantity {
+            None => Quantity {
+                amount: 1.0,
+                unit: None,
+            },
+            Some(q) => q.clone(),
+        }
+    }
+}
+
 impl Recipe {
     pub fn from_file(file: &std::path::PathBuf) -> anyhow::Result<Self> {
         let recipe_contents = std::fs::read_to_string(file)?;
@@ -84,7 +104,9 @@ impl Recipe {
         // let r = recipe.validate_recipe();
         Ok(recipe)
     }
+}
 
+impl Recipe {
     fn validate_recipe(self: &Self) -> anyhow::Result<()> {
         // if recipe.inputs.len() == 0 {
         //     Err("recipe has no inputs!");

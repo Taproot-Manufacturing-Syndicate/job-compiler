@@ -1,5 +1,5 @@
 [outputs]
-pump_housing_front={quantity=1}
+pump_housing_front={quantity={amount=1}}
 
 [inputs]
 pump_housing_front_untapped={version=0.1, type="printed"}

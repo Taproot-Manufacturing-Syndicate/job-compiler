@@ -1,8 +1,8 @@
 [outputs]
-m4_nuts = {quantity=100}
+m4_nuts = {quantity={amount=100}}
 
 [inputs]
-capital={amount="1.35 usd"}
+capital = { quantity = { amount = 1.35, unit = "USDollar" } }
 
 [dependencies]
 operator = {skills=["vendor interaction"]}

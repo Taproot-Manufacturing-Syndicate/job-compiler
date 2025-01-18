@@ -1,8 +1,8 @@
 [outputs]
-pump_housing_rear = {quantity=1}
+pump_housing_rear = {quantity={amount=1}}
 
 [inputs]
-pump_housing_rear_untapped = {quantity=1}
+pump_housing_rear_untapped = {quantity={amount=1}}
 
 [dependencies]
 tools = [ "M4 tap" ]

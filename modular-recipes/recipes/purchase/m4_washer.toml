@@ -1,9 +1,9 @@
 [outputs.m4_washer]
-quantity=100
+quantity = { amount=100 }
 comments = "4.4 mm ID, 8.8 mm OD, 0.8 mm thick"
 
 [inputs]
-capital={amount="7.18 usd"}
+capital={quantity={amount=7.18, unit="USDollar"}}
 
 [dependencies]
 operator = {skills=["vendor interaction"]}

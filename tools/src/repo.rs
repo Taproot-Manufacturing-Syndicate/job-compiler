@@ -85,51 +85,61 @@ impl Repo {
     }
 
     fn compile_inner(self: &Self, recipe: &Recipe, indent: usize) -> anyhow::Result<()> {
-        for (key, val) in recipe.inputs.iter() {
+        for (input_name, input_info) in recipe.inputs.iter() {
             for _ in 0..indent {
                 print!(" ");
             }
 
-            if key == "capital" {
+            if input_name == "capital" {
                 // The build process begins in capitalism :-(
 
-                if let Some(amount) = &val.amount {
-                    // I'd like to divide the amount of capital by the
-                    // quantity of the thing purchased.
-                    //
-                    // We can probably assume the `recipe.outputs` Option
-                    // is Some, but inside the Some is a container with
-                    // potentially any number of output things, which
-                    // makes it hard to account.
-                    //
-                    // For now i'll just handle the common case specially.
+                let input_quantity = input_info.get_quantity();
 
-                    if let Some(a) = amount.split_whitespace().next() {
-                        let cost = a.parse::<f32>().unwrap();
-                        if let Some(outputs) = &recipe.outputs {
-                            if outputs.len() == 1 {
-                                for (_k, v) in outputs.iter() {
-                                    if let Some(quantity) = &v.quantity {
-                                        println!(
-                                            "capital: {cost}/{quantity} = {:.2} each :-(",
-                                            cost / *quantity as f32
-                                        );
-                                    } else if let Some(amount) = &v.amount {
-                                        println!("capital: {cost}/{amount:?} :-(",);
-                                    }
-                                }
-                            }
+                let input_unit = match &input_quantity.unit {
+                    None => {
+                        return Err(anyhow::Error::msg(format!(
+                            "expected quantity unit USDollar on capital input"
+                        )))
+                    }
+                    Some(unit) if *unit != crate::recipe::Unit::USDollar => {
+                        return Err(anyhow::Error::msg(format!(
+                            "expected quantity unit USDollar on capital input"
+                        )))
+                    }
+                    Some(unit) => unit,
+                };
+
+                let cost = input_quantity.amount;
+
+                let outputs = match &recipe.outputs {
+                    None => return Err(anyhow::Error::msg(format!("no outputs!"))),
+                    Some(outputs) => outputs,
+                };
+
+                if outputs.len() == 1 {
+                    for (_output_name, output_info) in outputs.iter() {
+                        let output_quantity = output_info.get_quantity();
+                        let cost_each = cost / output_quantity.amount;
+                        if let Some(output_unit) = output_quantity.unit {
+                            println!(
+                                "capital: {:.3} {:?} / {:?}  :-(",
+                                cost_each, input_unit, output_unit
+                            );
+                        } else {
+                            println!("capital: {:.3} {:?} each :-(", cost_each, input_unit);
                         }
                     }
                 } else {
-                    panic!("no amount of capital?");
+                    return Err(anyhow::Error::msg(format!("no output!")));
                 }
                 continue;
             }
-            println!("{key:?} {val:?}");
-            match self.get_recipe(key) {
+            println!("{input_name:?} {input_info:?}");
+            match self.get_recipe(input_name) {
                 None => {
-                    return Err(anyhow::Error::msg(format!("recipe for {key} not found")));
+                    return Err(anyhow::Error::msg(format!(
+                        "recipe for {input_name} not found"
+                    )));
                 }
                 Some(input_recipe) => {
                     self.compile_inner(input_recipe, indent + 4)?;

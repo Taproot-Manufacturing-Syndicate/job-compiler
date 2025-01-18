@@ -1,10 +1,10 @@
 [outputs]
-pump_housing_rear_with_stepper = {quantity=1}
+pump_housing_rear_with_stepper = {quantity={amount=1}}
 
 [inputs]
-pump_housing_rear = {version=0.1, quantity=1}
-m4_5_shcs = {quantity=2}
-stepper_28byj_48={quantity=1}
+pump_housing_rear = {version=0.1, quantity={amount=1}}
+m4_5_shcs = {quantity={amount=2}}
+stepper_28byj_48={quantity={amount=1}}
 
 [dependencies]
 tools = [ "3 mm hex driver" ]

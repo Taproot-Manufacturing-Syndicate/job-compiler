@@ -1,8 +1,8 @@
 [outputs]
-m4_25_bhcs = {quantity=100}
+m4_25_bhcs = {quantity={amount=100}}
 
 [inputs]
-capital={amount="18.45 usd"}
+capital={quantity={amount=18.45, unit="USDollar"}}
 
 [dependencies]
 operator = {skills=["vendor interaction"]}

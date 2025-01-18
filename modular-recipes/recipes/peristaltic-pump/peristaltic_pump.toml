@@ -1,24 +1,24 @@
 [inputs]
-pump_housing_front_with_stepper = {quantity=1}
-bearing_roller = {quantity=1}
-pump_housing_rear_with_stepper = {quantity=1}
-tube_support = {quantity=1}
+pump_housing_front_with_stepper = {quantity={amount=1}}
+bearing_roller = {quantity={amount=1}}
+pump_housing_rear_with_stepper = {quantity={amount=1}}
+tube_support = {quantity={amount=1}}
 
 [inputs.silicone_tubing]
 type = "silicone tubing, 6mm OD, 4mm ID"
-amount = "1 meter"
+quantity = { amount = 1, unit="Meter" }
 comment = "PVC tube isn't flexible enough.  Adjust quantity to suit your application."
 
 [inputs.m4_25_bhcs]
 name = "m4_25_bhcs"
 type = "M4x25 BHCS"
-quantity = 4
+quantity = { amount = 4 }
 comment = """BHCS is preferred over SHCS so the screw heads sit recessed
 below the surface of the pump body."""
 
 [inputs.m4_nuts]
 type = "M4 nuts"
-quantity = 4
+quantity = { amount = 4 }
 
 [dependencies]
 tools = [ "3 mm hex driver" ]

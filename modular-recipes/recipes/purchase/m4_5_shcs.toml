@@ -1,8 +1,8 @@
 [outputs]
-m4_20_shcs = {quantity=100}
+m4_20_shcs = {quantity={amount=100}}
 
 [inputs]
-capital={amount="13.65 usd"}
+capital={quantity={amount=13.65, unit="USDollar"}}
 
 [dependencies]
 operator = {skills=["vendor interaction"]}

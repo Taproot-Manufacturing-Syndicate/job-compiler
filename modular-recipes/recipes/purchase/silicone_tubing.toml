@@ -1,8 +1,8 @@
 [outputs]
-silicone_tubing = {amount="3 m"}
+silicone_tubing = {quantity={amount=3, unit="Meter"}}
 
 [inputs]
-capital={amount="18.75 usd"}
+capital={quantity={amount=18.75, unit="USDollar"}}
 
 [dependencies]
 operator = {skills=["vendor interaction"]}

@@ -1,9 +1,9 @@
 [outputs.bearing_624]
-quantity=10
+quantity = { amount=10 }
 comments = "13mm OD, 4mm ID, 5mm wide"
 
 [inputs]
-capital={amount="8.99 usd"}
+capital={quantity={amount=8.99, unit="USDollar"}}
 
 [dependencies]
 operator = {skills=["vendor interaction"]}

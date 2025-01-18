@@ -1,5 +1,5 @@
 [outputs]
-bearing_roller = {quantity=1}
+bearing_roller = {quantity={amount=1}}
 
 # inputs list, similar to a cargo.toml file
 [inputs]
@@ -9,25 +9,25 @@ bearing_hub = {version=0.1, type="printed"}
 # alternate representation of an element of the inputs list
 [inputs.m4_20_shcs]
 type = "M4x20 SHCS"
-quantity = 3
+quantity = { amount=3 }
 comment = """These will hold the bearing rollers.  Possibly Button Heads
 Cap Screws would be better?  Probably either will work fine."""
 
 [inputs.m4_washer]
 type = "M4 washer"
-quantity = 6
+quantity = { amount=6 }
 dimensions = "12 mm OD, 4.4 mm ID, 1 mm thick"
 comment = """The upstream repo calls for 12 mm OD but i think that's
 too big, it hits the outer race of the bearings.  Use 8mm OD instead."""
 
 [inputs.bearing_624]
 type = "624 bearing"
-quantity = 6
+quantity = { amount=6 }
 comments = "13mm OD, 4mm ID, 5mm wide"
 
 [inputs.m4_nuts]
 type = "M4 nuts"
-quantity = 3
+quantity = { amount=3 }
 
 [dependencies]
 tools = [

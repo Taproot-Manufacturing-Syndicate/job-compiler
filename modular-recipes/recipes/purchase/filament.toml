@@ -1,8 +1,8 @@
 [outputs]
-filament = {amount="1 kg"}
+filament = { quantity = { amount = 1000, unit = "Gram" } }
 
 [inputs]
-capital={amount="23.99 usd"}
+capital={ quantity = { amount=23.99, unit="USDollar" } }
 
 [dependencies]
 operator = {skills=["vendor interaction"]}

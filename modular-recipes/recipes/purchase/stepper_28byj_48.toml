@@ -1,8 +1,8 @@
 [outputs]
-stepper_28byj_48 = {quantity=1}
+stepper_28byj_48 = {quantity={amount=1}}
 
 [inputs]
-capital={amount="1.35 usd"}
+capital={quantity={amount=1.35, unit="USDollar"}}
 
 [dependencies]
 operator = {skills=["vendor interaction"]}
