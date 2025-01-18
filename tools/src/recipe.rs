@@ -42,7 +42,7 @@ pub struct Operator {
 #[derive(Debug, serde::Deserialize)]
 pub struct Dependencies {
     tools: Vec<String>,
-    operator: Operator,
+    operator: Option<Operator>,
 }
 
 #[derive(Debug, serde::Deserialize)]
