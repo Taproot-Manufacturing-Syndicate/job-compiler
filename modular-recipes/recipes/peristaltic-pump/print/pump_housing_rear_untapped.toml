@@ -1,0 +1,14 @@
+[outputs]
+pump_housing_rear_untapped={version=0.1, quantity=1, type="printed"}
+
+[inputs]
+filament={}
+
+[dependencies]
+tools=["fdm-printer"]
+
+[config]
+model="https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/CheapPump.STL"
+
+[action]
+print={}

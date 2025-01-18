@@ -1,0 +1,13 @@
+[outputs]
+filament = {amount="1 kg"}
+
+[inputs]
+capital={amount="23.99 usd"}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.hatchbox3d.com/collections/abs-1-75mm/products/3d-abs-1kg1-75-red"
+]

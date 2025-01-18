@@ -20,7 +20,7 @@ dimensions = "12 mm OD, 4.4 mm ID, 1 mm thick"
 comment = """The upstream repo calls for 12 mm OD but i think that's
 too big, it hits the outer race of the bearings.  Use 8mm OD instead."""
 
-[inputs.624_bearing]
+[inputs.bearing_624]
 type = "624 bearing"
 quantity = 6
 comments = "13mm OD, 4mm ID, 5mm wide"

@@ -4,7 +4,7 @@ pump_housing_front_with_stepper={quantity=1}
 [inputs]
 pump_housing_front={version=0.1, quantity=1}
 m4_5_shcs={quantity=2, description="M4x5 SHCS"}
-stepper={quantity=1, type="J8ByJ-48"}
+stepper_28byj_48={quantity=1}
 
 [dependencies]
 tools = [ "3 mm hex driver" ]

@@ -1,0 +1,18 @@
+[outputs]
+stepper_28byj_48 = {quantity=1}
+
+[inputs]
+capital={amount="1.35 usd"}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.ebay.com/itm/224283233677"
+]
+
+documentation = [
+    "https://www.mouser.com/datasheet/2/758/stepd-01-data-sheet-1143075.pdf",
+    "https://components101.com/motors/28byj-48-stepper-motor"
+]

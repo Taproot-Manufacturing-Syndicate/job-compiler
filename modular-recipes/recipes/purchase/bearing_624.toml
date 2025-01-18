@@ -1,0 +1,14 @@
+[outputs.bearing_624]
+quantity=10
+comments = "13mm OD, 4mm ID, 5mm wide"
+
+[inputs]
+capital={amount="8.99 usd"}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.ebay.com/itm/162442914585"
+]
