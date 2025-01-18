@@ -20,6 +20,21 @@ pub struct Input {
 }
 
 #[derive(Debug, serde::Deserialize)]
+pub struct Output {
+    /// Each output has either a `quantity` (for discrete things, like
+    /// apples or bearings) or an `amount` (for continuous things,
+    /// like rope or flour).
+    ///
+    /// FIXME: Is there a good way to handle the "units" of the
+    /// quantity/amount? Maybe the units could default to "count", but
+    /// be optionally overridden by the recipe to things like "meters"
+    /// (of tubing) or "grams" (of chromic acid).  Then this struct
+    /// would be `quantity: usize, units: Option<Unit>`.
+    quantity: Option<usize>,
+    amount: Option<String>,
+}
+
+#[derive(Debug, serde::Deserialize)]
 pub struct Operator {
     skills: Vec<String>,
 }
@@ -51,7 +66,7 @@ pub struct Recipe {
     /// FIXME: Or is that always the case, and we should have no outputs
     /// section?  None of the recipes we've been doodling around with
     /// have anything like byproducts or waste streams...
-    outputs: Option<Vec<String>>,
+    outputs: Option<std::collections::HashMap<String, Output>>,
 }
 
 impl Recipe {
