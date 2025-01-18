@@ -136,6 +136,23 @@ impl Repo {
                 }
             }
         }
+
+        match &recipe.action {
+            crate::recipe::Action::process(s) => {
+                if let Some(tools) = &recipe.dependencies.tools {
+                    for _ in 0..indent {
+                        print!(" ");
+                    }
+                    println!("tools: {:?}", tools);
+                }
+                for _ in 0..indent {
+                    print!(" ");
+                }
+                println!("action: {s}");
+            }
+            _ => (),
+        }
+
         Ok(())
     }
 }
