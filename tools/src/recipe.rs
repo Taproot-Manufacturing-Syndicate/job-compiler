@@ -46,8 +46,9 @@ pub struct Dependencies {
 }
 
 #[derive(Debug, serde::Deserialize)]
-pub struct Action {
-    process: String,
+pub enum Action {
+    process(String),
+    print,
 }
 
 #[derive(Debug, serde::Deserialize)]
