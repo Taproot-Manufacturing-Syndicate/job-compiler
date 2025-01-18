@@ -16,12 +16,7 @@ struct Args {
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-
     let repo = Repo::new(&args.repo);
-    println!("{:#?}", repo);
-
-    let recipe: Option<&Recipe> = repo.get_recipe(&args.target);
-    println!("{recipe:#?}");
-
+    repo.compile(&args.target).unwrap();
     Ok(())
 }

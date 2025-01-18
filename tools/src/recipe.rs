@@ -15,8 +15,8 @@ pub struct Input {
     /// be optionally overridden by the recipe to things like "meters"
     /// (of tubing) or "grams" (of chromic acid).  Then this struct
     /// would be `quantity: usize, units: Option<Unit>`.
-    quantity: Option<usize>,
-    amount: Option<String>,
+    pub quantity: Option<usize>,
+    pub amount: Option<String>,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -30,36 +30,43 @@ pub struct Output {
     /// be optionally overridden by the recipe to things like "meters"
     /// (of tubing) or "grams" (of chromic acid).  Then this struct
     /// would be `quantity: usize, units: Option<Unit>`.
-    quantity: Option<usize>,
-    amount: Option<String>,
+    pub quantity: Option<usize>,
+    pub amount: Option<String>,
 }
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Operator {
-    skills: Vec<String>,
+    pub skills: Vec<String>,
 }
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Dependencies {
-    tools: Vec<String>,
-    operator: Option<Operator>,
+    pub tools: Option<Vec<String>>,
+    pub operator: Option<Operator>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct Purchase {
+    pub vendor: Vec<String>,
+    pub documentation: Option<Vec<String>>,
 }
 
 #[derive(Debug, serde::Deserialize)]
 pub enum Action {
     process(String),
     print,
+    purchase(Purchase),
 }
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Recipe {
     /// `[inputs]` is a Table where each key the the name (unique id)
     /// of a recipe in the repo, and the value is an Input object.
-    inputs: std::collections::HashMap<String, Input>,
+    pub inputs: std::collections::HashMap<String, Input>,
 
-    dependencies: Dependencies,
+    pub dependencies: Dependencies,
 
-    action: Action,
+    pub action: Action,
 
     /// If a recipe has no `[outputs]`, we assume it produces 1x of the
     /// thing identified by the name of the recipe.
@@ -67,7 +74,7 @@ pub struct Recipe {
     /// FIXME: Or is that always the case, and we should have no outputs
     /// section?  None of the recipes we've been doodling around with
     /// have anything like byproducts or waste streams...
-    outputs: Option<std::collections::HashMap<String, Output>>,
+    pub outputs: Option<std::collections::HashMap<String, Output>>,
 }
 
 impl Recipe {

@@ -1,4 +1,5 @@
 use crate::recipe::Recipe;
+use std::fmt;
 
 #[derive(Debug)]
 pub struct Repo {
@@ -20,6 +21,30 @@ impl Repo {
         self.recipes.get(recipe_name)
     }
 
+    pub fn compile(self: &Self, target: &str) -> anyhow::Result<()> {
+        let recipe = self.get_recipe(target);
+        match recipe {
+            None => {
+                return Err(anyhow::Error::msg(format!("recipe for {target} not found")));
+            }
+            Some(recipe) => {
+                println!("{recipe:#?}");
+                println!("inputs:");
+                for (key, val) in recipe.inputs.iter() {
+                    println!("{key:?} {val:?}");
+                    if key == "capital" {
+                        println!("aquire capital: {:?}", val.amount.to_owned());
+                    } else {
+                        self.compile(key)?;
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
+impl Repo {
     fn add_dir(self: &mut Self, path: &str) -> anyhow::Result<()> {
         // println!("reading Recipes from {path}");
         let dir_entries = std::fs::read_dir(path).unwrap();
