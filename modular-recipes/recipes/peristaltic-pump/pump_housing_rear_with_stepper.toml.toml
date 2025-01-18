@@ -1,15 +1,14 @@
-[[outputs]]
+[outputs]
 pump_housing_rear_with_stepper = {quantity=1}
 
-[[inputs]]
+[inputs]
 pump_housing_rear = {version=0.1, quantity=1}
 m4_5_shcs = {quantity=2}
 stepper = {type="J8BYJ-48", quantity=1}
 
-[[dependencies]]
+[dependencies]
 tools = [ "3 mm hex driver" ]
-operator = {skill="assembly"}
+operator = {skills=["assembly"]}
 
-[[action]]
+[action]
 process = """Screw the stepper to the printed rear housing."""
-

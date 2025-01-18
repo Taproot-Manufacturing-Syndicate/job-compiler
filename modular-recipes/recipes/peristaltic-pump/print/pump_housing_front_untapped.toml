@@ -1,14 +1,14 @@
-[[outputs]]
+[outputs]
 pump_housing_front_untapped={version=0.1, quantity=1, type="printed"}
 
-[[inputs]]
+[inputs]
 filament={}
 
-[[dependencies]]
-printer={type="fdm"}
+[dependencies]
+tools=["fdm-printer"]
 
-[[config]]
+[config]
 model="https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/pump-top.STL"
 
-[[action]]
+[action]
 print={}
