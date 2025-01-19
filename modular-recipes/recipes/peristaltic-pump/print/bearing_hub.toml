@@ -1,5 +1,5 @@
 [outputs]
-bearing_hub={version=0.1, quantity={amount=1}, type="printed"}
+bearing_hub={version=0.1, type="printed"}
 
 [inputs]
 filament={}

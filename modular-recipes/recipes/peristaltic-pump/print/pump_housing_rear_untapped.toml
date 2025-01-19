@@ -1,5 +1,5 @@
 [outputs]
-pump_housing_rear_untapped={version=0.1, quantity={amount=1}, type="printed"}
+pump_housing_rear_untapped={version=0.1, type="printed"}
 
 [inputs]
 filament={}

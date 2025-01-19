@@ -1,5 +1,5 @@
 [outputs]
-stepper_28byj_48 = {quantity={amount=1}}
+stepper_28byj_48 = {}
 
 [inputs]
 capital={quantity={amount=1.35, unit="USDollar"}}

@@ -1,5 +1,5 @@
 [outputs]
-bearing_roller = {quantity={amount=1}}
+bearing_roller = {}
 
 # inputs list, similar to a cargo.toml file
 [inputs]

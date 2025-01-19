@@ -1,5 +1,5 @@
 [outputs]
-tube_support={version=0.1, quantity={amount=1}, type="printed"}
+tube_support={version=0.1, type="printed"}
 
 [inputs]
 filament={}
