@@ -12,22 +12,42 @@ pub enum Unit {
 }
 
 /// `Quantity` measures the amount of a resource (Input or Output).
-#[derive(Clone, Copy, Debug, serde::Deserialize)]
+#[derive(Clone, Copy, serde::Deserialize)]
 pub struct Quantity {
     pub amount: f32,
     pub unit: Option<Unit>,
 }
 
+impl std::default::Default for Quantity {
+    fn default() -> Self {
+        Self {
+            amount: 1.0,
+            unit: None,
+        }
+    }
+}
+
+impl std::fmt::Debug for Quantity {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self.unit {
+            None => write!(f, "{:#}", self.amount),
+            Some(unit) => write!(f, "{:#} {:?}", self.amount, unit),
+        }
+    }
+}
+
 #[derive(Debug, serde::Deserialize)]
 pub struct Input {
     // Quantity defaults to "amount=1" if omitted.
-    pub quantity: Option<Quantity>,
+    #[serde(default)]
+    pub quantity: Quantity,
 }
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Output {
     // Quantity defaults to "amount=1" if omitted.
-    pub quantity: Option<Quantity>,
+    #[serde(default)]
+    pub quantity: Quantity,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -71,30 +91,6 @@ pub struct Recipe {
     /// section?  None of the recipes we've been doodling around with
     /// have anything like byproducts or waste streams...
     pub outputs: Option<std::collections::HashMap<String, Output>>,
-}
-
-impl Input {
-    pub fn get_quantity(&self) -> Quantity {
-        match &self.quantity {
-            None => Quantity {
-                amount: 1.0,
-                unit: None,
-            },
-            Some(q) => q.clone(),
-        }
-    }
-}
-
-impl Output {
-    pub fn get_quantity(&self) -> Quantity {
-        match &self.quantity {
-            None => Quantity {
-                amount: 1.0,
-                unit: None,
-            },
-            Some(q) => q.clone(),
-        }
-    }
 }
 
 impl Recipe {

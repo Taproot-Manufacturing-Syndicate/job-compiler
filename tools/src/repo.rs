@@ -93,9 +93,7 @@ impl Repo {
             if input_name == "capital" {
                 // The build process begins in capitalism :-(
 
-                let input_quantity = input_info.get_quantity();
-
-                let input_unit = match &input_quantity.unit {
+                let input_unit = match &input_info.quantity.unit {
                     None => {
                         return Err(anyhow::Error::msg(format!(
                             "expected quantity unit USDollar on capital input"
@@ -109,7 +107,7 @@ impl Repo {
                     Some(unit) => unit,
                 };
 
-                let cost = input_quantity.amount;
+                let cost = input_info.quantity.amount;
 
                 let outputs = match &recipe.outputs {
                     None => return Err(anyhow::Error::msg(format!("no outputs!"))),
@@ -118,9 +116,8 @@ impl Repo {
 
                 if outputs.len() == 1 {
                     for (_output_name, output_info) in outputs.iter() {
-                        let output_quantity = output_info.get_quantity();
-                        let cost_each = cost / output_quantity.amount;
-                        if let Some(output_unit) = output_quantity.unit {
+                        let cost_each = cost / output_info.quantity.amount;
+                        if let Some(output_unit) = output_info.quantity.unit {
                             println!(
                                 "capital: {:.3} {:?} / {:?}  :-(",
                                 cost_each, input_unit, output_unit
@@ -134,7 +131,7 @@ impl Repo {
                 }
                 continue;
             }
-            println!("{input_name:?} {input_info:?}");
+            println!("{input_name:?} ({:?})", input_info.quantity);
             match self.get_recipe(input_name) {
                 None => {
                     return Err(anyhow::Error::msg(format!(
