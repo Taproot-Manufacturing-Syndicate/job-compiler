@@ -1,5 +1,4 @@
 use crate::recipe::Recipe;
-use std::fmt;
 
 #[derive(Debug)]
 pub struct Repo {

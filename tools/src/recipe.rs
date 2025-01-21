@@ -68,6 +68,7 @@ pub struct Purchase {
 }
 
 #[derive(Debug, serde::Deserialize)]
+#[allow(non_camel_case_types)]
 pub enum Action {
     process(String),
     print,

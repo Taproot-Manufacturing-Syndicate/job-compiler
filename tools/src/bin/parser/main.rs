@@ -1,6 +1,5 @@
 use clap::Parser;
 
-use tools::Recipe;
 use tools::Repo;
 
 #[derive(Debug, clap::Parser)]
