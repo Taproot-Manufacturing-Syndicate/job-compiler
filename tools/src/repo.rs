@@ -1,3 +1,6 @@
+use std::io::Write;
+use std::process::Command;
+
 use crate::recipe::Recipe;
 
 #[derive(Debug)]
@@ -23,26 +26,25 @@ impl Repo {
     pub fn compile(self: &Self, target: &str) -> anyhow::Result<()> {
         let recipe = self.get_recipe(target);
 
-        // FIXME: Accumulate `inputs` from our callees, pass up to our
-        // caller via the Result?
-        //
-        // Or have a "compile context" argument with the "cost" in it,
-        // and update that as we go?
-        //
-        // Maybe in the context we should also construct a parallel
-        // build process?
-
-        // let inputs = std::collections::HashMap::<String, usize>::new();
-        // let price_per_unit = std::collections::HashMap::<String, f32>::new();
-
         match recipe {
             None => {
                 return Err(anyhow::Error::msg(format!("recipe for {target} not found")));
             }
             Some(recipe) => {
-                println!("building {target:#?}");
-                println!("inputs:");
-                self.compile_inner(recipe, 4)
+                let puml_filename = format!("{target}.puml");
+                let mut puml_file = std::fs::File::create(&puml_filename)?;
+                writeln!(puml_file, "@startuml")?;
+                writeln!(puml_file, "object {}", target)?;
+                self.compile_inner(&mut puml_file, target, recipe, 4)?;
+                writeln!(puml_file, "@enduml")?;
+                let output = Command::new("plantuml")
+                    .arg("-v")
+                    .arg(&puml_filename)
+                    .output()?;
+                if !output.status.success() {
+                    println!("{:#?}", output);
+                }
+                Ok(())
             }
         }
     }
@@ -83,80 +85,107 @@ impl Repo {
         Ok(())
     }
 
-    fn compile_inner(self: &Self, recipe: &Recipe, indent: usize) -> anyhow::Result<()> {
+    fn compile_inner(
+        self: &Self,
+        puml_file: &mut std::fs::File,
+        recipe_name: &str, // the name of the thing we're making
+        recipe: &Recipe,   // the recipe for the thing we're making
+        indent: usize,
+    ) -> anyhow::Result<()> {
         for (input_name, input_info) in recipe.inputs.iter() {
-            for _ in 0..indent {
-                print!(" ");
-            }
+            let input_recipe = self.get_recipe(input_name).unwrap();
 
-            if input_name == "capital" {
-                // The build process begins in capitalism :-(
+            // A Recipe whose only input is Capital is a Vitamin.
+            let cost = match input_recipe.is_vitamin() {
+                true => {
+                    let amount_needed = input_info.quantity;
 
-                let input_unit = match &input_info.quantity.unit {
-                    None => {
-                        return Err(anyhow::Error::msg(format!(
-                            "expected quantity unit USDollar on capital input"
-                        )))
-                    }
-                    Some(unit) if *unit != crate::recipe::Unit::USDollar => {
-                        return Err(anyhow::Error::msg(format!(
-                            "expected quantity unit USDollar on capital input"
-                        )))
-                    }
-                    Some(unit) => unit,
-                };
+                    // FIXME: for now Vitamins must have exactly one Input, and it must be Capital.
+                    assert_eq!(input_recipe.inputs.len(), 1);
+                    let input_capital =
+                        input_recipe
+                            .inputs
+                            .get("capital")
+                            .ok_or(anyhow::Error::msg(format!(
+                                "can't find input capital for {input_name}"
+                            )))?;
+                    assert_eq!(
+                        input_capital.quantity.unit,
+                        Some(crate::recipe::Unit::USDollar)
+                    );
+                    let cost = input_capital.quantity.amount;
 
-                let cost = input_info.quantity.amount;
-
-                let outputs = match &recipe.outputs {
-                    None => return Err(anyhow::Error::msg(format!("no outputs!"))),
-                    Some(outputs) => outputs,
-                };
-
-                if outputs.len() == 1 {
-                    for (_output_name, output_info) in outputs.iter() {
-                        let cost_each = cost / output_info.quantity.amount;
-                        if let Some(output_unit) = output_info.quantity.unit {
-                            println!(
-                                "capital: {:.3} {:?} / {:?}  :-(",
-                                cost_each, input_unit, output_unit
-                            );
-                        } else {
-                            println!("capital: {:.3} {:?} each :-(", cost_each, input_unit);
+                    let outputs = match &input_recipe.outputs {
+                        None => {
+                            return Err(anyhow::Error::msg(format!(
+                                "{} has no outputs!",
+                                input_name
+                            )))
                         }
-                    }
-                } else {
-                    return Err(anyhow::Error::msg(format!("no output!")));
-                }
-                continue;
-            }
-            println!("{input_name:?} ({:?})", input_info.quantity);
-            match self.get_recipe(input_name) {
-                None => {
-                    return Err(anyhow::Error::msg(format!(
-                        "recipe for {input_name} not found"
-                    )));
-                }
-                Some(input_recipe) => {
-                    self.compile_inner(input_recipe, indent + 4)?;
-                }
-            }
-        }
+                        Some(outputs) => outputs,
+                    };
 
-        match &recipe.action {
-            crate::recipe::Action::process(s) => {
-                if let Some(tools) = &recipe.dependencies.tools {
-                    for _ in 0..indent {
-                        print!(" ");
+                    // FIXME: For now Vitamins must produce exactly one output.
+                    assert_eq!(outputs.len(), 1);
+
+                    let (_output_name, output_info) = outputs.iter().next().unwrap();
+                    let output_quantity = output_info.quantity;
+
+                    // compute the "unit cost" of this input
+
+                    let cost_each = cost / output_quantity.amount;
+                    let total_cost = amount_needed.amount * cost_each;
+                    if let Some(output_unit) = output_info.quantity.unit {
+                        Some(format!(
+                            "${:.6} / {:?}\ntotal: ${:.6}",
+                            cost_each, output_unit, total_cost
+                        ))
+                    } else {
+                        Some(format!("${:.6} each\ntotal: ${:.6}", cost_each, total_cost))
                     }
-                    println!("tools: {:?}", tools);
                 }
-                for _ in 0..indent {
-                    print!(" ");
+                false => None,
+            };
+
+            let (input_object_name, input_object_declaration) = match input_recipe.is_vitamin() {
+                true => {
+                    // "Leaf" nodes get unique boxes.
+                    let uuid = uuid::Uuid::new_v4();
+                    let input_object_name = format!("uuid_{}", uuid.simple());
+                    (
+                        input_object_name.clone(),
+                        format!("\"{}\" as {}", input_name, input_object_name),
+                    )
                 }
-                println!("action: {s}");
+                false => (input_name.clone(), input_name.clone()),
+            };
+
+            writeln!(puml_file, "object {}", input_object_declaration);
+            match &input_recipe.action {
+                crate::recipe::Action::process(process) => {
+                    writeln!(puml_file, "{} : {:?}", input_object_name, process)?;
+                }
+                crate::recipe::Action::print => {
+                    writeln!(puml_file, "{} : print", input_object_name)?;
+                }
+                crate::recipe::Action::purchase(_purchase) => {
+                    writeln!(puml_file, "{} : buy", input_object_name)?;
+                }
             }
-            _ => (),
+
+            if let Some(cost_str) = cost {
+                writeln!(puml_file, "{} : {:?}", input_object_name, cost_str);
+            }
+
+            write!(puml_file, "{} <|-- {}", recipe_name, input_object_name);
+            if input_info.quantity.unit != None || input_info.quantity.amount != 1.0 {
+                write!(puml_file, " : quantity={:?}", input_info.quantity);
+            }
+            writeln!(puml_file, "");
+
+            if !input_recipe.is_vitamin() {
+                self.compile_inner(puml_file, input_name, input_recipe, indent + 4)?;
+            }
         }
 
         Ok(())
