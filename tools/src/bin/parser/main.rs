@@ -20,6 +20,7 @@ fn main() -> anyhow::Result<()> {
     for repo_path in &args.repo {
         repos.add_repo(repo_path)?;
     }
-    repos.compile(&args.target)?;
+    let build_plan = repos.compile(&args.target)?;
+    println!("{build_plan:#?}");
     Ok(())
 }

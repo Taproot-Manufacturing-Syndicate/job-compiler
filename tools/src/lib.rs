@@ -14,3 +14,6 @@ pub use repos::Repos;
 pub mod recipe_id;
 pub use recipe_id::RecipeId;
 pub use recipe_id::RecipeIdParseError;
+
+pub mod build_plan;
+pub use build_plan::BuildPlan;

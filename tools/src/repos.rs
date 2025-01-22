@@ -11,6 +11,8 @@ use crate::recipe_id::RecipeIdParseError;
 
 use crate::repo::Repo;
 
+use crate::build_plan::BuildPlan;
+
 #[derive(Debug, Default)]
 pub struct Repos {
     repos: std::collections::HashMap<String, Repo>,
@@ -99,26 +101,28 @@ impl Repos {
         }
     }
 
-    pub fn compile(&self, target: &str) -> Result<(), RecipeCompileError> {
+    pub fn compile<'a>(&'a self, target: &'a str) -> Result<BuildPlan<'a>, RecipeCompileError> {
+        let mut build_plan = BuildPlan::new(self);
         let recipe = self.get_recipe(target)?;
         let puml_filename = format!("{target}.puml");
         let mut puml_file = std::fs::File::create(&puml_filename)?;
         writeln!(puml_file, "@startuml")?;
         writeln!(puml_file, "object {}", target)?;
-        self.compile_inner(&mut puml_file, 1, target, recipe, 4)?;
+        self.compile_inner(&mut build_plan, &mut puml_file, 1, target, recipe, 4)?;
         writeln!(puml_file, "@enduml")?;
         Command::new("plantuml")
             .arg("-v")
             .arg(&puml_filename)
             .output()
             .expect("failed to run `plantuml`");
-        Ok(())
+        Ok(build_plan)
     }
 }
 
 impl Repos {
     fn compile_inner(
         &self,
+        build_plan: &mut BuildPlan,
         puml_file: &mut std::fs::File,
         quantity: usize,   // how many of this thing we're making
         recipe_name: &str, // the name of the thing we're making FIXME: aka the Item
@@ -127,6 +131,24 @@ impl Repos {
     ) -> Result<(), RecipeCompileError> {
         for (input_name, input_info) in recipe.inputs.iter() {
             let input_recipe = self.get_recipe(input_name)?;
+
+            if input_recipe.is_vitamin() {
+                match build_plan.bom.get_mut(input_name) {
+                    Some(item) => {
+                        item.quantity = item.quantity + &(input_info.quantity * quantity);
+                    }
+                    None => {
+                        build_plan.bom.insert(
+                            input_name.clone(),
+                            crate::build_plan::Item {
+                                name: input_name.clone(),
+                                quantity: input_info.quantity * quantity,
+                            },
+                        );
+                    }
+                }
+            }
+
             // A Recipe whose only input is Capital is a Vitamin.
             let cost = match input_recipe.is_vitamin() {
                 true => {
@@ -202,6 +224,7 @@ impl Repos {
 
             if !input_recipe.is_vitamin() {
                 self.compile_inner(
+                    build_plan,
                     puml_file,
                     (input_info.quantity * quantity).amount as usize, // FIXME: pretty dodgy
                     input_name,
