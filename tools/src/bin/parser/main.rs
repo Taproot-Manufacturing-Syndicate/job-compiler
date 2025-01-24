@@ -16,6 +16,6 @@ struct Args {
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let repo = Repo::new(&args.repo);
-    repo.compile(&args.target).unwrap();
+    repo.compile(&args.target)?;
     Ok(())
 }
