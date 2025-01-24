@@ -1,9 +1,3 @@
-// #[derive(Debug, serde::Deserialize)]
-// enum Quantity {
-//     Count(usize),
-//     Amount(String),
-// }
-
 #[derive(Clone, Copy, Debug, PartialEq, serde::Deserialize)]
 pub enum Unit {
     USDollar,
