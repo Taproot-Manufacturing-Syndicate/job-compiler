@@ -101,6 +101,19 @@ impl Recipe {
         // let r = recipe.validate_recipe();
         Ok(recipe)
     }
+
+    // A "Vitamin" is a recipe whose only input is "capital".
+    pub fn is_vitamin(&self) -> bool {
+        if self.inputs.len() != 1 {
+            return false;
+        }
+        if let Some(input_name) = self.inputs.keys().into_iter().next() {
+            if input_name == "capital" {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 impl Recipe {
@@ -109,5 +122,34 @@ impl Recipe {
         //     Err("recipe has no inputs!");
         // }
         Ok(())
+    }
+}
+
+mod test {
+    use super::*;
+
+    #[test]
+    fn is_vitamin() {
+        let recipes = vec![
+            (
+                "../modular-recipes/recipes/peristaltic-pump/peristaltic_pump.toml",
+                false,
+            ),
+            (
+                "../modular-recipes/recipes/peristaltic-pump/print/bearing_hub.toml",
+                false,
+            ),
+            ("../modular-recipes/recipes/purchase/m4_nuts.toml", true),
+            ("../modular-recipes/recipes/purchase/filament.toml", true),
+        ];
+
+        for (recipe_filename, is_leaf) in recipes.iter() {
+            println!("{recipe_filename}");
+            let recipe_path = std::path::PathBuf::from(recipe_filename);
+            let recipe = Recipe::from_file(&recipe_path).unwrap();
+            let result = recipe.is_vitamin();
+            println!("recipe {:#?}, leaf={}", recipe_filename, result);
+            assert_eq!(result, *is_leaf);
+        }
     }
 }
