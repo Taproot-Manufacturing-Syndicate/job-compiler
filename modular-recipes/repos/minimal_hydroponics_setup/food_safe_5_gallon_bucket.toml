@@ -1,0 +1,11 @@
+[inputs]
+capital = { quantity = { amount=7.00, unit="USDollar" }}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.lowes.com/pd/Leaktite-5-gal-70mil-Food-Safe-White-Bucket/5013212247",
+    "https://www.leaktite.com/products/5-gal-foodsafe-70-mil-white"
+]

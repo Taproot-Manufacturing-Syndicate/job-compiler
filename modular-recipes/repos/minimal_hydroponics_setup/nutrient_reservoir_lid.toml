@@ -1,0 +1,9 @@
+[inputs]
+food_safe_bucket_lid = {}
+
+[dependencies]
+tools = [ "hole saw" ]
+
+[action]
+process = """Drill three holes in the lid the right size to fit the 1
+inch tube, the 1/2 inch tube, and the pump's power cord through."""

@@ -1,0 +1,13 @@
+[output]
+clay_pebble_grow_medium = { quantity = { amount=10, unit="Liter" } }
+
+[inputs]
+capital = { quantity = { amount=15.19, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://hydrobuilder.com/mother-earth-hydroton-10-liter.html"
+]

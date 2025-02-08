@@ -1,0 +1,24 @@
+[inputs]
+nutrient_reservoir = {}
+plant_tray = {}
+nutrient_pump = {}
+grow_lights = {}
+tasmota_power_outlet = { quantity = { amount=2 } }
+hose_1_inch = { quantity = { amount=1, unit="Meter" } }
+hose_1_2_inch = { quantity = { amount=1, unit="Meter" } }
+
+[dependencies]
+operator = { skills=["assembly"] }
+
+[action]
+process = """Position the plant tray above the nutrient reservoir.
+
+Put the pump in the nutrient reservoir.
+
+Use the 1/2 inch tubing to connect the 1/2 inch fitting on the plant
+tray to the pump outlet.
+
+Use the 1 inch tubing to connect the 1 inch fitting on the plant tray
+to the nutrient reservoir.
+
+FIXME: Plant some plants etc??."""

@@ -1,0 +1,15 @@
+[outputs.sonoff_s31]
+comments = """Make sure you get model 'S31', not 'S31 Lite'
+(which lacks power monitoring).  Detailed info on this device here:
+<https://tinkerman.cat/post/sonoff-s31-now-serious>"""
+
+[inputs]
+capital = { quantity = { amount=10.90, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://itead.cc/product/sonoff-s31/"
+]

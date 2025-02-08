@@ -1,0 +1,15 @@
+[outputs.nutrient_reservoir]
+comment = """The important thing here is that it's food safe (because
+it's going to be touching our food), opaque to visible light (to inhibit
+algae growth), and large enough to hold all the nutrient solution used
+in the system."""
+
+[inputs]
+food_safe_5_gallon_bucket = {}
+nutrient_reservoir_lid = {}
+
+[dependencies]
+operator = { skills=["assembly"] }
+
+[action]
+process = """Put the lid on the bucket, duh."""

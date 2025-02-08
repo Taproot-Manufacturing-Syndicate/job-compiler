@@ -1,0 +1,13 @@
+[outputs]
+hose_1_2_inch = { quantity = { amount=100, unit="Foot" } }
+
+[inputs]
+capital = { quantity = { amount=69.95, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.ebay.com/itm/125116790610"
+]

@@ -1,0 +1,12 @@
+[inputs]
+capital = { quantity = { amount=5.75, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.ebay.com/itm/134772441988",
+    "https://www.ebay.com/itm/251050375775?var=554293415440",
+    "https://www.ebay.com/itm/251313018420",
+]

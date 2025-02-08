@@ -1,0 +1,10 @@
+[inputs]
+capital = { quantity = { amount=15.19, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.botanicare.com/products/fittings/"
+]

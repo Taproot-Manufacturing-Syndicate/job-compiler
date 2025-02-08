@@ -1,0 +1,10 @@
+[inputs]
+capital = { quantity = { amount=138, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://hydrobuilder.com/active-aqua-black-tubing.html"
+]

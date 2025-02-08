@@ -1,0 +1,10 @@
+[inputs]
+capital = { quantity = { amount=68, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://farmhydrosupplies.com/product/agrobrite-fluorescent-t5-grow-light-with-6400k-bulbs/"
+]

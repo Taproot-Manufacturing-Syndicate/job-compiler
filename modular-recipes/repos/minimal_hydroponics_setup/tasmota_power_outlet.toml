@@ -1,0 +1,10 @@
+[inputs]
+sonoff_s31 = { }
+
+[dependencies]
+operator = {skills=["vendor interaction", "firmware_flashing"]}
+tools = [ "firmware_flasher" ]
+
+[action]
+process = """Flash the Sonoff S31 with Tasmota firmware per the
+instructions here: <https://tasmota.github.io/docs/devices/Sonoff-S31/>"""

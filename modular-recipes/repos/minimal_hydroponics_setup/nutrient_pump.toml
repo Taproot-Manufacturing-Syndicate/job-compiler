@@ -1,0 +1,19 @@
+[outputs.nutrient_pump]
+comments = """Active Aqua 250 GPH, or maybe the 160 is enough?  Or maybe
+the 40?  I like that they publish GPH vs lift height curves, and it
+falls off pretty rapidly for the smaller pumps.
+
+The 160 GPH and 250 GPH both use 1/2 inch tubing, so i'll try one of
+those, easy to switch to the other one if the first one's no good."""
+
+[inputs]
+capital={quantity={amount=17.75, unit="USDollar"}}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.ebay.com/itm/373981715463",
+    "https://hydrobuilder.com/active-aqua-submersible-water-pumps.html",
+]

@@ -1,0 +1,10 @@
+[inputs]
+capital = { quantity = { amount=5.00, unit="USDollar" }}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.leaktite.com/products/5gld-hdpe-foodsafe-lid-w-gasket",
+]
