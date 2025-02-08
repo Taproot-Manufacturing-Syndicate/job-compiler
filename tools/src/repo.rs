@@ -79,7 +79,15 @@ impl Repo {
         // println!("reading Recipe from {:?}", path);
         if let Some(recipe_name) = path.file_stem() {
             let key = recipe_name.to_string_lossy().into_owned();
-            let value = crate::Recipe::from_file(path)?;
+            let value = match crate::Recipe::from_file(path) {
+                Ok(recipe) => recipe,
+                Err(e) => {
+                    return Err(anyhow::Error::msg(format!(
+                        "failed to read recipe {}: {:?}",
+                        key, e
+                    )));
+                }
+            };
             self.recipes.insert(key, value);
         }
         Ok(())
@@ -93,7 +101,15 @@ impl Repo {
         indent: usize,
     ) -> anyhow::Result<()> {
         for (input_name, input_info) in recipe.inputs.iter() {
-            let input_recipe = self.get_recipe(input_name).unwrap();
+            let input_recipe = match self.get_recipe(input_name) {
+                Some(recipe) => recipe,
+                None => {
+                    return Err(anyhow::Error::msg(format!(
+                        "failed to get recipe '{}'",
+                        input_name
+                    )));
+                }
+            };
 
             // A Recipe whose only input is Capital is a Vitamin.
             let cost = match input_recipe.is_vitamin() {
@@ -109,10 +125,12 @@ impl Repo {
                             .ok_or(anyhow::Error::msg(format!(
                                 "can't find input capital for {input_name}"
                             )))?;
-                    assert_eq!(
-                        input_capital.quantity.unit,
-                        Some(crate::recipe::Unit::USDollar)
-                    );
+                    if input_capital.quantity.unit != Some(crate::recipe::Unit::USDollar) {
+                        return Err(anyhow::Error::msg(format!(
+                            "{} input capital does not have units USDollar",
+                            input_name
+                        )));
+                    }
                     let cost = input_capital.quantity.amount;
 
                     let outputs = match &input_recipe.outputs {

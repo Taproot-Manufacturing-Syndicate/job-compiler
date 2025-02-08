@@ -6,7 +6,7 @@ pub enum Unit {
 }
 
 /// `Quantity` measures the amount of a resource (Input or Output).
-#[derive(Clone, Copy, serde::Deserialize)]
+#[derive(Clone, Copy, PartialEq, serde::Deserialize)]
 pub struct Quantity {
     pub amount: f32,
     pub unit: Option<Unit>,
@@ -37,7 +37,7 @@ pub struct Input {
     pub quantity: Quantity,
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, PartialEq, serde::Deserialize)]
 pub struct Output {
     // Quantity defaults to "amount=1" if omitted.
     #[serde(default)]
@@ -91,7 +91,18 @@ pub struct Recipe {
 impl Recipe {
     pub fn from_file(file: &std::path::PathBuf) -> anyhow::Result<Self> {
         let recipe_contents = std::fs::read_to_string(file)?;
-        let recipe: Recipe = toml::from_str(&recipe_contents)?;
+        let mut recipe: Recipe = toml::from_str(&recipe_contents)?;
+        if recipe.outputs == None {
+            if let Some(recipe_name) = file.file_stem() {
+                let mut outputs = std::collections::HashMap::<String, Output>::new();
+                let key = recipe_name.to_string_lossy().into_owned();
+                let value = Output {
+                    quantity: Quantity::default(),
+                };
+                outputs.insert(key, value);
+                recipe.outputs = Some(outputs);
+            }
+        }
         // let r = recipe.validate_recipe();
         Ok(recipe)
     }
