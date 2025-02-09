@@ -3,3 +3,4 @@ pub use recipe::Recipe;
 
 pub mod repo;
 pub use repo::Repo;
+pub use repo::RepoLoadError;

@@ -9,14 +9,20 @@ pub struct Repo {
     recipes: std::collections::HashMap<String, Recipe>,
 }
 
+#[derive(Debug, thiserror::Error)]
+pub enum RepoLoadError {
+    #[error("io error: {0}")]
+    StdIoError(#[from] std::io::Error),
+}
+
 impl Repo {
-    pub fn new(path: &str) -> Self {
+    pub fn new(path: &str) -> Result<Self, RepoLoadError> {
         let mut repo = Self {
             path: std::string::String::from(path),
             recipes: std::collections::HashMap::<String, Recipe>::new(),
         };
-        repo.add_dir(path).unwrap();
-        repo
+        repo.add_dir(path)?;
+        Ok(repo)
     }
 
     pub fn get_recipe(self: &Self, recipe_name: &str) -> Option<&Recipe> {
@@ -51,9 +57,9 @@ impl Repo {
 }
 
 impl Repo {
-    fn add_dir(self: &mut Self, path: &str) -> anyhow::Result<()> {
+    fn add_dir(self: &mut Self, path: &str) -> Result<(), RepoLoadError> {
         // println!("reading Recipes from {path}");
-        let dir_entries = std::fs::read_dir(path).unwrap();
+        let dir_entries = std::fs::read_dir(path)?;
         for dir_entry in dir_entries {
             let dir_entry = dir_entry.unwrap();
             let file_type = dir_entry.file_type().unwrap();
