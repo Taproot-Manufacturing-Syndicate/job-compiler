@@ -154,8 +154,8 @@ mod test {
                 "../modular-recipes/recipes/peristaltic-pump/print/bearing_hub.toml",
                 false,
             ),
-            ("../modular-recipes/recipes/purchase/m4_nuts.toml", true),
-            ("../modular-recipes/recipes/purchase/filament.toml", true),
+            ("../modular-recipes/repos/fasteners/m4_nuts.toml", true),
+            ("../modular-recipes/repos/fasteners/filament.toml", true),
         ];
 
         for (recipe_filename, is_leaf) in recipes.iter() {
