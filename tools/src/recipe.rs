@@ -32,7 +32,7 @@ impl std::fmt::Debug for Quantity {
     }
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct Input {
     // Quantity defaults to "amount=1" if omitted.
     #[serde(default)]
@@ -46,24 +46,24 @@ pub struct Output {
     pub quantity: Quantity,
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct Operator {
     pub skills: Vec<String>,
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct Dependencies {
     pub tools: Option<Vec<String>>,
     pub operator: Option<Operator>,
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct Purchase {
     pub vendor: Vec<String>,
     pub documentation: Option<Vec<String>>,
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum Action {
     process(String),
@@ -71,7 +71,7 @@ pub enum Action {
     purchase(Purchase),
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct Recipe {
     /// `[inputs]` is a Table where each key the the name (unique id)
     /// of a recipe in the repo, and the value is an Input object.
