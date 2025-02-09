@@ -1,8 +1,10 @@
 #[derive(Clone, Copy, Debug, PartialEq, serde::Deserialize)]
 pub enum Unit {
-    USDollar,
-    Meter,
+    Foot,
     Gram,
+    Liter,
+    Meter,
+    USDollar,
 }
 
 /// `Quantity` measures the amount of a resource (Input or Output).
