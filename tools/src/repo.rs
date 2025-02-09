@@ -150,9 +150,12 @@ impl Repo {
                     let output_quantity = output_info.quantity;
 
                     // compute the "unit cost" of this input
-
                     let cost_each = cost / output_quantity.amount;
                     let total_cost = amount_needed.amount * cost_each;
+
+                    // FIXME: Try to coerce the units here - if we buy
+                    // hose in rolls measured in feet, but we use lengths
+                    // of hose measured in meters, that should be ok.
                     if let Some(output_unit) = output_info.quantity.unit {
                         Some(format!(
                             "${:.6} / {:?}\ntotal: ${:.6}",
