@@ -159,11 +159,9 @@ mod test {
         ];
 
         for (recipe_filename, is_leaf) in recipes.iter() {
-            println!("{recipe_filename}");
             let recipe_path = std::path::PathBuf::from(recipe_filename);
             let recipe = Recipe::from_file(&recipe_path).unwrap();
             let result = recipe.is_vitamin();
-            println!("recipe {:#?}, leaf={}", recipe_filename, result);
             assert_eq!(result, *is_leaf);
         }
     }
