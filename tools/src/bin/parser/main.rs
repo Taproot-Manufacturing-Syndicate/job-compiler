@@ -1,21 +1,25 @@
 use clap::Parser;
 
-use tools::Repo;
-
 #[derive(Debug, clap::Parser)]
 #[command(version, about, long_about = None)]
 struct Args {
     /// The name of the recipe to build.
     target: String,
 
-    /// Directory containing the repo of all repositories.
+    /// Directories containing repos.
     #[arg(short, long)]
-    repo: String,
+    // repo: String,
+    repo: Vec<String>,
 }
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-    let repo = Repo::new(&args.repo).unwrap();
-    repo.compile(&args.target)?;
+    // let repo = tools::Repo::new(&args.repo).unwrap();
+    // repo.compile(&args.target)?;
+    let mut repos = tools::Repos::default();
+    for repo_path in &args.repo {
+        repos.add_repo(repo_path)?;
+    }
+    repos.compile(&args.target)?;
     Ok(())
 }
