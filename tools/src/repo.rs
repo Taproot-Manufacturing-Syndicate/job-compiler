@@ -60,13 +60,18 @@ impl Repo {
             // println!("trying {:?} ({:?})", dir_entry, file_type);
             if file_type.is_file() {
                 let path = dir_entry.path();
-                match self.add_file(&path) {
-                    Ok(()) => {
-                        // println!("added {:?}", dir_entry);
+                match path.extension() {
+                    Some(s) if s.eq("toml") => {
+                        match self.add_file(&path) {
+                            Ok(()) => {
+                                // println!("added {:?}", dir_entry);
+                            }
+                            Err(e) => {
+                                println!("failed to read recipe from {:?}: {:?}", path, e);
+                            }
+                        }
                     }
-                    Err(e) => {
-                        println!("failed to read recipe from {:?}: {:?}", path, e);
-                    }
+                    _ => (), // skip unknown file extensions
                 }
             } else if file_type.is_dir() {
                 let _ = self.add_dir(dir_entry.path().to_str().unwrap());
