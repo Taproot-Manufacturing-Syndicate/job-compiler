@@ -1,3 +1,11 @@
+#[derive(Debug, thiserror::Error)]
+pub enum RecipeLoadError {
+    #[error(transparent)]
+    StdIoError(#[from] std::io::Error),
+    #[error(transparent)]
+    TomlDeserializeError(#[from] toml::de::Error),
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, serde::Deserialize)]
 pub enum Unit {
     Foot,
@@ -91,7 +99,7 @@ pub struct Recipe {
 }
 
 impl Recipe {
-    pub fn from_file(file: &std::path::PathBuf) -> anyhow::Result<Self> {
+    pub fn from_file(file: &std::path::PathBuf) -> Result<Self, RecipeLoadError> {
         let recipe_contents = std::fs::read_to_string(file)?;
         let mut recipe: Recipe = toml::from_str(&recipe_contents)?;
         if recipe.outputs == None {
