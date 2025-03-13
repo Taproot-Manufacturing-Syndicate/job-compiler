@@ -1,43 +1,11 @@
+use crate::quantity::*;
+
 #[derive(Debug, thiserror::Error)]
 pub enum RecipeLoadError {
     #[error(transparent)]
     StdIoError(#[from] std::io::Error),
     #[error(transparent)]
     TomlDeserializeError(#[from] toml::de::Error),
-}
-
-#[derive(Clone, Copy, Debug, PartialEq, serde::Deserialize)]
-pub enum Unit {
-    Foot,
-    Gram,
-    Liter,
-    Meter,
-    USDollar,
-}
-
-/// `Quantity` measures the amount of a resource (Input or Output).
-#[derive(Clone, Copy, PartialEq, serde::Deserialize)]
-pub struct Quantity {
-    pub amount: f32,
-    pub unit: Option<Unit>,
-}
-
-impl std::default::Default for Quantity {
-    fn default() -> Self {
-        Self {
-            amount: 1.0,
-            unit: None,
-        }
-    }
-}
-
-impl std::fmt::Debug for Quantity {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match &self.unit {
-            None => write!(f, "{:#}", self.amount),
-            Some(unit) => write!(f, "{:#} {:?}", self.amount, unit),
-        }
-    }
 }
 
 #[derive(Debug, serde::Deserialize, PartialEq)]

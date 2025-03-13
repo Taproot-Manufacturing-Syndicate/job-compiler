@@ -134,7 +134,7 @@ impl Repo {
                             .ok_or(anyhow::Error::msg(format!(
                                 "can't find input capital for {input_name}"
                             )))?;
-                    if input_capital.quantity.unit != Some(crate::recipe::Unit::USDollar) {
+                    if input_capital.quantity.unit != Some(crate::quantity::Unit::USDollar) {
                         return Err(anyhow::Error::msg(format!(
                             "{} input capital does not have units USDollar",
                             input_name

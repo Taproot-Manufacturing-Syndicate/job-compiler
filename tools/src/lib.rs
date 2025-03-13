@@ -1,3 +1,6 @@
+pub mod quantity;
+pub use quantity::*;
+
 pub mod recipe;
 pub use recipe::Recipe;
 

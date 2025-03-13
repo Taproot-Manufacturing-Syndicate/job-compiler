@@ -128,17 +128,14 @@ impl Repos {
             // A Recipe whose only input is Capital is a Vitamin.
             let cost = match input_recipe.is_vitamin() {
                 true => {
-                    let amount_needed = crate::recipe::Quantity {
-                        unit: input_info.quantity.unit,
-                        amount: quantity as f32 * input_info.quantity.amount,
-                    };
+                    let amount_needed = input_info.quantity * quantity;
 
                     // FIXME: for now Vitamins must have exactly one Input, and it must be Capital.
                     assert_eq!(input_recipe.inputs.len(), 1);
                     let input_capital = input_recipe.inputs.get("capital").ok_or_else(|| {
                         RecipeCompileError::VitaminLacksCapital(input_name.into())
                     })?;
-                    if input_capital.quantity.unit != Some(crate::recipe::Unit::USDollar) {
+                    if input_capital.quantity.unit != Some(crate::quantity::Unit::USDollar) {
                         return Err(RecipeCompileError::VitaminCapitalHasWrongUnit(
                             input_name.into(),
                         ));
@@ -218,7 +215,7 @@ impl Repos {
             if !input_recipe.is_vitamin() {
                 self.compile_inner(
                     puml_file,
-                    (quantity as f32 * input_info.quantity.amount) as usize, // FIXME: pretty dodgy
+                    (input_info.quantity * quantity).amount as usize, // FIXME: pretty dodgy
                     input_name,
                     input_recipe,
                     indent + 4,
