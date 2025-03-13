@@ -5,7 +5,7 @@ use tools::Repo;
 #[derive(Debug, clap::Parser)]
 #[command(version, about, long_about = None)]
 struct Args {
-    // The name of the recipe to build.
+    /// The name of the recipe to build.
     target: String,
 
     /// Directory containing the repo of all repositories.
