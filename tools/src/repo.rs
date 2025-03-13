@@ -5,7 +5,7 @@ use crate::recipe::Recipe;
 
 #[derive(Debug)]
 pub struct Repo {
-    path: String,
+    _path: String,
     recipes: std::collections::HashMap<String, Recipe>,
 }
 
@@ -18,24 +18,22 @@ pub enum RepoLoadError {
 impl Repo {
     pub fn new(path: &str) -> Result<Self, RepoLoadError> {
         let mut repo = Self {
-            path: std::string::String::from(path),
+            _path: std::string::String::from(path),
             recipes: std::collections::HashMap::<String, Recipe>::new(),
         };
         repo.add_dir(path)?;
         Ok(repo)
     }
 
-    pub fn get_recipe(self: &Self, recipe_name: &str) -> Option<&Recipe> {
+    pub fn get_recipe(&self, recipe_name: &str) -> Option<&Recipe> {
         self.recipes.get(recipe_name)
     }
 
-    pub fn compile(self: &Self, target: &str) -> anyhow::Result<()> {
+    pub fn compile(&self, target: &str) -> anyhow::Result<()> {
         let recipe = self.get_recipe(target);
 
         match recipe {
-            None => {
-                return Err(anyhow::Error::msg(format!("recipe for {target} not found")));
-            }
+            None => Err(anyhow::Error::msg(format!("recipe for {target} not found"))),
             Some(recipe) => {
                 let puml_filename = format!("{target}.puml");
                 let mut puml_file = std::fs::File::create(&puml_filename)?;
@@ -57,7 +55,7 @@ impl Repo {
 }
 
 impl Repo {
-    fn add_dir(self: &mut Self, path: &str) -> Result<(), RepoLoadError> {
+    fn add_dir(&mut self, path: &str) -> Result<(), RepoLoadError> {
         // println!("reading Recipes from {path}");
         let dir_entries = std::fs::read_dir(path)?;
         for dir_entry in dir_entries {
@@ -86,11 +84,11 @@ impl Repo {
         Ok(())
     }
 
-    fn add_file(self: &mut Self, path: &std::path::PathBuf) -> anyhow::Result<()> {
+    fn add_file(&mut self, path: &std::path::PathBuf) -> anyhow::Result<()> {
         // println!("reading Recipe from {:?}", path);
         if let Some(recipe_name) = path.file_stem() {
             let key = recipe_name.to_string_lossy().into_owned();
-            let value = match crate::Recipe::from_file(path) {
+            let value = match Recipe::from_file(path) {
                 Ok(recipe) => recipe,
                 Err(e) => {
                     return Err(anyhow::Error::msg(format!(
@@ -105,7 +103,7 @@ impl Repo {
     }
 
     fn compile_inner(
-        self: &Self,
+        &self,
         puml_file: &mut std::fs::File,
         recipe_name: &str, // the name of the thing we're making
         recipe: &Recipe,   // the recipe for the thing we're making
@@ -192,7 +190,7 @@ impl Repo {
                 false => (input_name.clone(), input_name.clone()),
             };
 
-            writeln!(puml_file, "object {}", input_object_declaration);
+            writeln!(puml_file, "object {}", input_object_declaration)?;
             match &input_recipe.action {
                 crate::recipe::Action::process(process) => {
                     writeln!(puml_file, "{} : {:?}", input_object_name, process)?;
@@ -206,14 +204,14 @@ impl Repo {
             }
 
             if let Some(cost_str) = cost {
-                writeln!(puml_file, "{} : {:?}", input_object_name, cost_str);
+                writeln!(puml_file, "{} : {:?}", input_object_name, cost_str)?;
             }
 
-            write!(puml_file, "{} <|-- {}", recipe_name, input_object_name);
-            if input_info.quantity.unit != None || input_info.quantity.amount != 1.0 {
-                write!(puml_file, " : quantity={:?}", input_info.quantity);
+            write!(puml_file, "{} <|-- {}", recipe_name, input_object_name)?;
+            if input_info.quantity.unit.is_some() || input_info.quantity.amount != 1.0 {
+                write!(puml_file, " : quantity={:?}", input_info.quantity)?;
             }
-            writeln!(puml_file, "");
+            writeln!(puml_file)?;
 
             if !input_recipe.is_vitamin() {
                 self.compile_inner(puml_file, input_name, input_recipe, indent + 4)?;

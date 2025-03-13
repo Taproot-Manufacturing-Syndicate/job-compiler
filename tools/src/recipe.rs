@@ -102,7 +102,7 @@ impl Recipe {
     pub fn from_file(file: &std::path::PathBuf) -> Result<Self, RecipeLoadError> {
         let recipe_contents = std::fs::read_to_string(file)?;
         let mut recipe: Recipe = toml::from_str(&recipe_contents)?;
-        if recipe.outputs == None {
+        if recipe.outputs.is_none() {
             if let Some(recipe_name) = file.file_stem() {
                 let mut outputs = std::collections::HashMap::<String, Output>::new();
                 let key = recipe_name.to_string_lossy().into_owned();
@@ -113,7 +113,7 @@ impl Recipe {
                 recipe.outputs = Some(outputs);
             }
         }
-        // let r = recipe.validate_recipe();
+        recipe.validate_recipe()?;
         Ok(recipe)
     }
 
@@ -122,17 +122,17 @@ impl Recipe {
         if self.inputs.len() != 1 {
             return false;
         }
-        if let Some(input_name) = self.inputs.keys().into_iter().next() {
+        if let Some(input_name) = self.inputs.keys().next() {
             if input_name == "capital" {
                 return true;
             }
         }
-        return false;
+        false
     }
 }
 
 impl Recipe {
-    fn validate_recipe(self: &Self) -> anyhow::Result<()> {
+    fn validate_recipe(&self) -> Result<(), RecipeLoadError> {
         // if recipe.inputs.len() == 0 {
         //     Err("recipe has no inputs!");
         // }
@@ -141,8 +141,6 @@ impl Recipe {
 }
 
 mod test {
-    use super::*;
-
     #[test]
     fn is_vitamin() {
         let recipes = vec![
@@ -160,7 +158,7 @@ mod test {
 
         for (recipe_filename, is_leaf) in recipes.iter() {
             let recipe_path = std::path::PathBuf::from(recipe_filename);
-            let recipe = Recipe::from_file(&recipe_path).unwrap();
+            let recipe = super::Recipe::from_file(&recipe_path).unwrap();
             let result = recipe.is_vitamin();
             assert_eq!(result, *is_leaf);
         }
