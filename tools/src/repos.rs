@@ -103,7 +103,7 @@ impl Repos {
         let mut puml_file = std::fs::File::create(&puml_filename)?;
         writeln!(puml_file, "@startuml")?;
         writeln!(puml_file, "object {}", target)?;
-        self.compile_inner(&mut puml_file, target, recipe, 4)?;
+        self.compile_inner(&mut puml_file, 1, target, recipe, 4)?;
         writeln!(puml_file, "@enduml")?;
         Command::new("plantuml")
             .arg("-v")
@@ -118,17 +118,20 @@ impl Repos {
     fn compile_inner(
         &self,
         puml_file: &mut std::fs::File,
+        quantity: usize,   // how many of this thing we're making
         recipe_name: &str, // the name of the thing we're making FIXME: aka the Item
         recipe: &Recipe,   // the recipe for the thing we're making
         indent: usize,
     ) -> Result<(), RecipeCompileError> {
         for (input_name, input_info) in recipe.inputs.iter() {
             let input_recipe = self.get_recipe(input_name)?;
-
             // A Recipe whose only input is Capital is a Vitamin.
             let cost = match input_recipe.is_vitamin() {
                 true => {
-                    let amount_needed = input_info.quantity;
+                    let amount_needed = crate::recipe::Quantity {
+                        unit: input_info.quantity.unit,
+                        amount: quantity as f32 * input_info.quantity.amount,
+                    };
 
                     // FIXME: for now Vitamins must have exactly one Input, and it must be Capital.
                     assert_eq!(input_recipe.inputs.len(), 1);
@@ -213,7 +216,13 @@ impl Repos {
             writeln!(puml_file)?;
 
             if !input_recipe.is_vitamin() {
-                self.compile_inner(puml_file, input_name, input_recipe, indent + 4)?;
+                self.compile_inner(
+                    puml_file,
+                    (quantity as f32 * input_info.quantity.amount) as usize, // FIXME: pretty dodgy
+                    input_name,
+                    input_recipe,
+                    indent + 4,
+                )?;
             }
         }
 
