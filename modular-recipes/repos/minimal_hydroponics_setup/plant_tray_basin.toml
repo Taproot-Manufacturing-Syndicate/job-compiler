@@ -1,0 +1,11 @@
+[inputs]
+food_safe_5_gallon_bucket = {}
+
+[dependencies]
+tools = [ "hack saw", "step drill" ]
+
+[action]
+process = """* Cut the top of the bucket off, leaving a kind of deep dish
+or bowl that will holds the plant growth medium and the plants.
+
+* Drill holes for the two fittings."""

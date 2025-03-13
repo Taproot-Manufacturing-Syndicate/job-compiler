@@ -1,5 +1,5 @@
 [inputs]
-food_safe_5_gallon_bucket = {}
+plant_tray_basin = {}
 clay_pebble_grow_medium = { quantity = { amount=5, unit="Liter" } }
 barb_fitting_1_inch = {}
 barb_fitting_1_2_inch = {}
@@ -8,11 +8,6 @@ barb_fitting_1_2_inch = {}
 tools = [ "hack saw" ]
 
 [action]
-process = """Cut the top of the bucket off, leaving a kind of deep dish
-or bowl that will holds the plant growth medium and the plants.
+process = """Attach the two fittings.
 
-Drill holes for the two fittings.
-
-Attach the two fittings.
-
-Add the grow medium """
+Add the grow medium."""
