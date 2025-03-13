@@ -106,13 +106,7 @@ impl Repos {
         writeln!(puml_file, "object {}", target)?;
         self.compile_inner(&mut puml_file, target, recipe, 4)?;
         writeln!(puml_file, "@enduml")?;
-        let output = Command::new("plantuml")
-            .arg("-v")
-            .arg(&puml_filename)
-            .output()?;
-        if !output.status.success() {
-            println!("{:#?}", output);
-        }
+        Command::new("plantuml").arg("-v").arg(&puml_filename).output().expect("failed to run `plantuml`");
         Ok(())
     }
 }
