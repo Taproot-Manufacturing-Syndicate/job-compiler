@@ -64,7 +64,6 @@ impl Repos {
                     .to_str()
                     .ok_or_else(|| AddRepoError::InvalidRepoName(repo_path.into()))?;
                 self.repos.insert(repo_name.into(), repo);
-                println!("added repo {repo_name}");
                 Ok(())
             }
             None => {
