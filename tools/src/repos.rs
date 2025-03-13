@@ -119,7 +119,7 @@ impl Repos {
     fn compile_inner(
         &self,
         puml_file: &mut std::fs::File,
-        recipe_name: &str, // the name of the thing we're making
+        recipe_name: &str, // the name of the thing we're making FIXME: aka the Item
         recipe: &Recipe,   // the recipe for the thing we're making
         indent: usize,
     ) -> Result<(), RecipeCompileError> {
