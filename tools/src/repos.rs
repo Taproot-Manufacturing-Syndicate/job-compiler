@@ -11,7 +11,7 @@ use crate::recipe_id::RecipeIdParseError;
 
 use crate::repo::Repo;
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Repos {
     repos: std::collections::HashMap<String, Repo>,
 }
@@ -106,7 +106,11 @@ impl Repos {
         writeln!(puml_file, "object {}", target)?;
         self.compile_inner(&mut puml_file, target, recipe, 4)?;
         writeln!(puml_file, "@enduml")?;
-        Command::new("plantuml").arg("-v").arg(&puml_filename).output().expect("failed to run `plantuml`");
+        Command::new("plantuml")
+            .arg("-v")
+            .arg(&puml_filename)
+            .output()
+            .expect("failed to run `plantuml`");
         Ok(())
     }
 }
