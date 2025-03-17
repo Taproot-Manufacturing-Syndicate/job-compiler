@@ -8,6 +8,14 @@ use std::process::Command;
 use crate::quantity::*;
 
 #[derive(Debug, thiserror::Error)]
+pub enum PumlError {
+    #[error(transparent)]
+    StdIoError(#[from] std::io::Error),
+    #[error(transparent)]
+    RecipeLookupError(#[from] crate::repos::RecipeLookupError),
+}
+
+#[derive(Debug, thiserror::Error)]
 pub enum MdbookError {
     #[error("error from mdbook: {0:?}")]
     MdbookProcessError(std::process::Output),
@@ -17,6 +25,8 @@ pub enum MdbookError {
     BuildPlanError(String),
     #[error(transparent)]
     RecipeLookupError(#[from] crate::repos::RecipeLookupError),
+    #[error(transparent)]
+    PumlError(#[from] PumlError),
     #[error(transparent)]
     VitaminError(#[from] crate::recipe::VitaminError),
 }
@@ -83,6 +93,59 @@ impl<'a> BuildPlan<'a> {
 }
 
 impl<'a> BuildPlan<'a> {
+    pub fn make_puml(
+        &self,
+        puml_dir: &str,
+        recipe_name: &str,
+        recipe: &crate::recipe::Recipe,
+    ) -> Result<(), PumlError> {
+        let puml_filename = format!("{}/{}_puml.puml", puml_dir, recipe_name);
+        let mut puml_file =
+            std::fs::File::create(&puml_filename).expect("failed to create {puml_filename}");
+        writeln!(puml_file, "@startuml")?;
+        writeln!(puml_file, "object {}", recipe_name)?;
+
+        for (input_name, input_info) in recipe.inputs.iter() {
+            let input_recipe = self.repos.get_recipe(input_name)?;
+
+            let uuid = uuid::Uuid::new_v4();
+            let input_object_name = format!("uuid_{}", uuid.simple());
+            let input_object_declaration = format!("\"{}\" as {}", input_name, input_object_name);
+
+            writeln!(puml_file, "object {}", input_object_declaration)?;
+            match &input_recipe.action {
+                crate::recipe::Action::process(process) => {
+                    writeln!(puml_file, "{} : {:?}", input_object_name, process)?;
+                }
+                crate::recipe::Action::print(printed_part) => {
+                    writeln!(puml_file, "{} : {:?}", input_object_name, printed_part)?;
+                }
+                crate::recipe::Action::purchase(_purchase) => {
+                    writeln!(puml_file, "{} : buy", input_object_name)?;
+                }
+            }
+
+            // FIXME
+            // if let Some(cost_str) = cost {
+            //     writeln!(puml_file, "{} : {:?}", input_object_name, cost_str)?;
+            // }
+
+            write!(puml_file, "{} <|-- {}", recipe_name, input_object_name)?;
+            if input_info.quantity.unit.is_some() || input_info.quantity.amount != 1.0 {
+                write!(puml_file, " : quantity={:?}", input_info.quantity)?;
+            }
+            writeln!(puml_file)?;
+        }
+
+        writeln!(puml_file, "@enduml")?;
+        Command::new("plantuml")
+            .arg("-v")
+            .arg(&puml_filename)
+            .output()
+            .expect("failed to run `plantuml`");
+        return Ok(());
+    }
+
     fn write_mdbook(&self, mdbook_dir: &str) -> Result<(), MdbookError> {
         let output = Command::new("mdbook")
             .arg("init")
@@ -324,11 +387,16 @@ impl<'a> BuildPlan<'a> {
         //     self.write_mdbook_chapters(input_recipe, mdbook_dir, summary_md_file)?;
         // }
 
+        self.make_puml(&format!("{mdbook_dir}/src"), recipe_name, recipe)?;
+
         // Write the chapter on this recipe.
         let chapter_md_filename = format!("{mdbook_dir}/src/{recipe_name}.md");
         let mut chapter_md_file = std::fs::File::create(&chapter_md_filename)?;
 
         writeln!(chapter_md_file, "# {recipe_name}")?;
+        writeln!(chapter_md_file, "")?;
+
+        writeln!(chapter_md_file, "![]({recipe_name}_puml.png)")?;
         writeln!(chapter_md_file, "")?;
 
         if let Some(tools) = &recipe.dependencies.tools {
