@@ -20,7 +20,9 @@ fn main() -> anyhow::Result<()> {
     for repo_path in &args.repo {
         repos.add_repo(repo_path)?;
     }
+
     let build_plan = repos.compile(&args.target)?;
-    println!("{build_plan:#?}");
+    build_plan.make_mdbook()?;
+
     Ok(())
 }

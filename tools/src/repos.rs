@@ -102,7 +102,7 @@ impl Repos {
     }
 
     pub fn compile<'a>(&'a self, target: &'a str) -> Result<BuildPlan<'a>, RecipeCompileError> {
-        let mut build_plan = BuildPlan::new(self);
+        let mut build_plan = BuildPlan::new(target, self);
         let recipe = self.get_recipe(target)?;
         let puml_filename = format!("{target}.puml");
         let mut puml_file = std::fs::File::create(&puml_filename)?;
