@@ -8,6 +8,16 @@ pub enum RecipeLoadError {
     TomlDeserializeError(#[from] toml::de::Error),
 }
 
+#[derive(Debug, thiserror::Error, PartialEq)]
+pub enum VitaminError {
+    #[error("not a vitamin")]
+    NotAVitamin,
+    #[error("vitamin has bogus inputs")]
+    InputsError,
+    #[error("vitamon has no output")]
+    OutputError,
+}
+
 #[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct Input {
     // Quantity defaults to "amount=1" if omitted.
@@ -83,6 +93,45 @@ impl Recipe {
         }
         recipe.validate_recipe()?;
         Ok(recipe)
+    }
+
+    /// Compute the cost (of quantity 1).  Currently only work on vitamins.
+    pub fn unit_cost(&self) -> Result<f32, VitaminError> {
+        if !self.is_vitamin() {
+            return Err(VitaminError::NotAVitamin);
+        }
+
+        // Vitamins must have exactly one Input, and it must be Capital.
+        if self.inputs.len() != 1 {
+            return Err(VitaminError::InputsError);
+        }
+
+        let capital = match self.inputs.get("capital") {
+            Some(capital) => capital,
+            None => return Err(VitaminError::InputsError),
+        };
+
+        if capital.quantity.unit != Some(crate::quantity::Unit::USDollar) {
+            return Err(VitaminError::InputsError);
+        }
+
+        let total_cost = capital.quantity.amount;
+
+        let outputs = match &self.outputs {
+            Some(outputs) => outputs,
+            None => return Err(VitaminError::OutputError),
+        };
+
+        // FIXME: For now Vitamins must produce exactly one output.
+        if outputs.len() != 1 {
+            return Err(VitaminError::OutputError);
+        }
+
+        let (_output_name, output_info) = outputs.iter().next().unwrap();
+        let output_quantity = output_info.quantity;
+
+        // compute the "unit cost" of this input
+        return Ok(total_cost / output_quantity.amount);
     }
 
     // A "Vitamin" is a recipe whose only input is "capital".

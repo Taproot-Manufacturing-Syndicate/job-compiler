@@ -52,6 +52,8 @@ pub enum RecipeCompileError {
     VitaminCapitalHasWrongUnit(String),
     #[error("input produces no output: {0}")]
     InputProducesNoOutput(String),
+    #[error(transparent)]
+    VitaminError(#[from] crate::recipe::VitaminError),
 }
 
 impl Repos {
@@ -130,17 +132,8 @@ impl Repos {
                 true => {
                     let amount_needed = input_info.quantity * quantity;
 
-                    // FIXME: for now Vitamins must have exactly one Input, and it must be Capital.
-                    assert_eq!(input_recipe.inputs.len(), 1);
-                    let input_capital = input_recipe.inputs.get("capital").ok_or_else(|| {
-                        RecipeCompileError::VitaminLacksCapital(input_name.into())
-                    })?;
-                    if input_capital.quantity.unit != Some(crate::quantity::Unit::USDollar) {
-                        return Err(RecipeCompileError::VitaminCapitalHasWrongUnit(
-                            input_name.into(),
-                        ));
-                    }
-                    let cost = input_capital.quantity.amount;
+                    let cost_each = input_recipe.unit_cost()?;
+                    let total_cost = amount_needed.amount * cost_each;
 
                     let outputs = match &input_recipe.outputs {
                         None => {
@@ -155,11 +148,6 @@ impl Repos {
                     assert_eq!(outputs.len(), 1);
 
                     let (_output_name, output_info) = outputs.iter().next().unwrap();
-                    let output_quantity = output_info.quantity;
-
-                    // compute the "unit cost" of this input
-                    let cost_each = cost / output_quantity.amount;
-                    let total_cost = amount_needed.amount * cost_each;
 
                     // FIXME: Try to coerce the units here - if we buy
                     // hose in rolls measured in feet, but we use lengths
