@@ -38,6 +38,11 @@ pub struct BuildPlan<'a> {
     /// Values are Items, which are just the name and a Quantity.
     pub bom: std::collections::HashMap<String, Item>,
 
+    /// Printed parts needed to build this Item.
+    /// Keys are the names of Items.
+    /// Values are Items, which are just the name and a Quantity.
+    pub prints: std::collections::HashMap<String, Item>,
+
     /// Tools needed to build this Item.
     pub tools: std::collections::HashSet<String>,
 
@@ -52,6 +57,7 @@ impl<'a> BuildPlan<'a> {
         BuildPlan {
             name: target,
             bom: std::collections::HashMap::<String, Item>::new(),
+            prints: std::collections::HashMap::<String, Item>::new(),
             tools: std::collections::HashSet::<String>::new(),
             skills: std::collections::HashSet::<String>::new(),
             repos,
@@ -128,6 +134,7 @@ impl<'a> BuildPlan<'a> {
         writeln!(summary_md_file, "- [Overview](overview/overview.md)")?;
 
         self.write_mdbook_bom(&overview_dirname, summary_md_file)?;
+        self.write_mdbook_prints(&overview_dirname, summary_md_file)?;
         self.write_mdbook_tools(&overview_dirname, summary_md_file)?;
         self.write_mdbook_skills(&overview_dirname, summary_md_file)?;
 
@@ -188,6 +195,68 @@ impl<'a> BuildPlan<'a> {
         Ok(())
     }
 
+    fn write_mdbook_prints(
+        &self,
+        overview_dirname: &str,
+        summary_md_file: &mut std::fs::File,
+    ) -> Result<(), MdbookError> {
+        if self.prints.len() == 0 {
+            return Ok(());
+        }
+
+        let prints_md_filename = format!("{overview_dirname}/prints.md");
+        let mut prints_md_file = std::fs::File::create(&prints_md_filename)?;
+
+        writeln!(prints_md_file, "# Printed parts")?;
+        writeln!(prints_md_file, "")?;
+
+        let mut names: Vec<&String> = self.prints.keys().collect();
+        names.sort();
+        for name in names {
+            self.write_mdbook_printed_part(&mut prints_md_file, &name)?;
+        }
+
+        writeln!(summary_md_file, "    - [Printed parts](overview/prints.md)")?;
+
+        Ok(())
+    }
+
+    fn write_mdbook_printed_part(
+        &self,
+        prints_md_file: &mut std::fs::File,
+        name: &str,
+    ) -> Result<(), MdbookError> {
+        let item = self
+            .prints
+            .get(name)
+            .ok_or(MdbookError::BuildPlanError(format!(
+                "item {name} not found"
+            )))?;
+        writeln!(prints_md_file, "## {name}")?;
+        writeln!(
+            prints_md_file,
+            "Quantity: {:?}\n",
+            item.quantity.amount as usize
+        )?;
+
+        let recipe = self.repos.get_recipe(name)?;
+        match &recipe.action {
+            crate::recipe::Action::print(printed_part) => {
+                writeln!(
+                    prints_md_file,
+                    "Model: [{}]({})\n",
+                    printed_part.model, printed_part.model
+                )?;
+                writeln!(prints_md_file, "Print profile: {}\n", printed_part.profile)?;
+            }
+            _ => {
+                panic!("printed part {} has wrong Action {:?}", name, recipe.action);
+            }
+        }
+
+        Ok(())
+    }
+
     fn write_mdbook_tools(
         &self,
         overview_dirname: &str,
@@ -240,7 +309,7 @@ impl<'a> BuildPlan<'a> {
         summary_md_file: &mut std::fs::File,
     ) -> Result<(), MdbookError> {
         let recipe = self.repos.get_recipe(recipe_name)?;
-        if recipe.is_vitamin() {
+        if recipe.is_vitamin() || recipe.is_print() {
             return Ok(());
         }
 

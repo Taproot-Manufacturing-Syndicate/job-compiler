@@ -62,3 +62,10 @@ impl std::ops::Add<&Quantity> for Quantity {
         }
     }
 }
+
+impl std::ops::AddAssign<usize> for Quantity {
+    fn add_assign(&mut self, rhs: usize) {
+        assert_eq!(self.unit, None);
+        self.amount += rhs as f32;
+    }
+}
