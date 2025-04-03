@@ -6,8 +6,7 @@ grow_lights = {}
 tasmota_power_outlet = { quantity = { amount=2 } }
 hose_1_inch = { quantity = { amount=1, unit="Meter" } }
 hose_1_2_inch = { quantity = { amount=1, unit="Meter" } }
-nutrient_concentrate = { quantity = { amount=1, unit="Liter" } }
-ph_up_down = { quantity = { amount=1, unit="Liter" } }
+nutrient_solution = { quantity = { amount=5, unit="Liter" } }
 
 [dependencies]
 operator = { skills=["assembly"] }

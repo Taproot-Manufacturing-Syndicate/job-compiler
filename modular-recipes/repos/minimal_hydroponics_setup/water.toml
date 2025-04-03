@@ -1,0 +1,9 @@
+[inputs]
+capital={quantity={amount=0.01, unit="USDollar"}}
+
+[dependencies]
+
+[action.purchase]
+vendor = [
+    "Water comes from the tap."
+]

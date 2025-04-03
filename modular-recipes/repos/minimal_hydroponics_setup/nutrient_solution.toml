@@ -1,0 +1,12 @@
+[outputs.nutrient_solution]
+quantity = { amount=5, unit="Liter" }
+
+[dependencies]
+
+[inputs]
+nutrient_concentrate = { quantity = { amount=1, unit="Liter" } }
+ph_up_down = { quantity = { amount=1, unit="Liter" } }
+water = { quantity = { amount=3, unit="Liter" } }
+
+[action]
+process = "Mix everything together in the nutrient reservoir."
