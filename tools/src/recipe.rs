@@ -146,6 +146,14 @@ impl Recipe {
         }
         false
     }
+
+    // A "print" is a recipe whose Action is "print".
+    pub fn is_print(&self) -> bool {
+        match self.action {
+            Action::print => true,
+            _ => false,
+        }
+    }
 }
 
 impl Recipe {
