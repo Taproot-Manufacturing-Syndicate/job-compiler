@@ -1,0 +1,10 @@
+[inputs]
+capital={quantity={amount=20.00, unit="USDollar"}}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.sparkfun.com/kingston-canvas-go-plus-64gb-microsd-card-with-adapter.html"
+]

@@ -1,0 +1,15 @@
+[outputs.controller]
+comments = """Lots of room for variation here.  This reference design is a Pi with a simple timer app to turn the lights and pump on and off on a fixed schedule."""
+
+[inputs]
+raspberry_pi = {}
+micro_sd_card = {}
+pi_power_supply = {}
+pi_enclosure = {}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action]
+process = """Flash the MicroSD card with Raspberry Pi OS Bookworm.
+Put everything together."""

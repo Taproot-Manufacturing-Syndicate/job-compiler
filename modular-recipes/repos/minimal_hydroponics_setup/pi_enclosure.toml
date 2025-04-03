@@ -1,0 +1,10 @@
+[inputs]
+capital={quantity={amount=10.00, unit="USDollar"}}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.sparkfun.com/raspberry-pi-5-case-red-white.html"
+]

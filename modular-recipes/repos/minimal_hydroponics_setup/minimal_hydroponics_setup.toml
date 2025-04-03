@@ -7,6 +7,7 @@ tasmota_power_outlet = { quantity = { amount=2 } }
 hose_1_inch = { quantity = { amount=1, unit="Meter" } }
 hose_1_2_inch = { quantity = { amount=1, unit="Meter" } }
 nutrient_solution = { quantity = { amount=5, unit="Liter" } }
+controller = {}
 
 [dependencies]
 operator = { skills=["assembly"] }

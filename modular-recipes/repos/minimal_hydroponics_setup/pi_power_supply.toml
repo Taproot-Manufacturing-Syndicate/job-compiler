@@ -1,0 +1,10 @@
+[inputs]
+capital={quantity={amount=12.00, unit="USDollar"}}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.sparkfun.com/raspberry-pi-27w-usb-c-pd-power-supply-white.html"
+]
