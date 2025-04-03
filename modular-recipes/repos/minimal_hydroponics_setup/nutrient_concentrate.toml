@@ -1,0 +1,15 @@
+[outputs.nutrient_concentrate]
+comments = """Lots of different options, this should be tailored to the
+plants you're growing."""
+quantity = { amount=1, unit="Liter" }
+
+[inputs]
+capital={quantity={amount=26.89, unit="USDollar"}}
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://www.ebay.com/itm/261224602266?var=560203649178"
+]
