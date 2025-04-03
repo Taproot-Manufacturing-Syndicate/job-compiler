@@ -7,8 +7,5 @@ filament={}
 [dependencies]
 tools=["fdm-printer"]
 
-[config]
-model="https://github.com/DerSchultze/Peristaltic-Controller@92a4d9b:stl/tube-support.STL"
-
 [action]
-print={}
+print={ model="https://github.com/DerSchultze/Peristaltic-Controller/blob/92a4d9b/stl/tube-support.STL", profile="placeholder" }

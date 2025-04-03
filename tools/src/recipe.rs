@@ -50,10 +50,16 @@ pub struct Purchase {
 }
 
 #[derive(Debug, serde::Deserialize, PartialEq)]
+pub struct PrintedPart {
+    pub model: String,
+    pub profile: String,
+}
+
+#[derive(Debug, serde::Deserialize, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum Action {
     process(String),
-    print,
+    print(PrintedPart),
     purchase(Purchase),
 }
 
@@ -150,7 +156,7 @@ impl Recipe {
     // A "print" is a recipe whose Action is "print".
     pub fn is_print(&self) -> bool {
         match self.action {
-            Action::print => true,
+            Action::print(_) => true,
             _ => false,
         }
     }

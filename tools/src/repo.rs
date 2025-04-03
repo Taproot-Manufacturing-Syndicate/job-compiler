@@ -195,8 +195,8 @@ impl Repo {
                 crate::recipe::Action::process(process) => {
                     writeln!(puml_file, "{} : {:?}", input_object_name, process)?;
                 }
-                crate::recipe::Action::print => {
-                    writeln!(puml_file, "{} : print", input_object_name)?;
+                crate::recipe::Action::print(printed_part) => {
+                    writeln!(puml_file, "{} : {:?}", input_object_name, printed_part)?;
                 }
                 crate::recipe::Action::purchase(_purchase) => {
                     writeln!(puml_file, "{} : buy", input_object_name)?;
