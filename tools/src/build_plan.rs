@@ -38,6 +38,12 @@ pub struct BuildPlan<'a> {
     /// Values are Items, which are just the name and a Quantity.
     pub bom: std::collections::HashMap<String, Item>,
 
+    /// Tools needed to build this Item.
+    pub tools: std::collections::HashSet<String>,
+
+    /// Operator skills needed to build this Item.
+    pub skills: std::collections::HashSet<String>,
+
     pub repos: &'a crate::repos::Repos,
 }
 
@@ -46,6 +52,8 @@ impl<'a> BuildPlan<'a> {
         BuildPlan {
             name: target,
             bom: std::collections::HashMap::<String, Item>::new(),
+            tools: std::collections::HashSet::<String>::new(),
+            skills: std::collections::HashSet::<String>::new(),
             repos,
         }
     }
@@ -120,6 +128,9 @@ impl<'a> BuildPlan<'a> {
         writeln!(summary_md_file, "- [Overview](overview/overview.md)")?;
 
         self.write_mdbook_bom(&overview_dirname, summary_md_file)?;
+        self.write_mdbook_tools(&overview_dirname, summary_md_file)?;
+        self.write_mdbook_skills(&overview_dirname, summary_md_file)?;
+
         Ok(())
     }
 
@@ -173,6 +184,50 @@ impl<'a> BuildPlan<'a> {
             summary_md_file,
             "    - [Bill of Materials](overview/bom.md)"
         )?;
+
+        Ok(())
+    }
+
+    fn write_mdbook_tools(
+        &self,
+        overview_dirname: &str,
+        summary_md_file: &mut std::fs::File,
+    ) -> Result<(), MdbookError> {
+        let tools_md_filename = format!("{overview_dirname}/tools.md");
+        let mut tools_md_file = std::fs::File::create(&tools_md_filename)?;
+
+        writeln!(tools_md_file, "# Tools")?;
+        writeln!(tools_md_file, "")?;
+
+        let mut tools: Vec<&String> = self.tools.iter().collect();
+        tools.sort();
+        for tool in tools {
+            writeln!(tools_md_file, "* {tool}")?;
+        }
+
+        writeln!(summary_md_file, "    - [Tools](overview/tools.md)")?;
+
+        Ok(())
+    }
+
+    fn write_mdbook_skills(
+        &self,
+        overview_dirname: &str,
+        summary_md_file: &mut std::fs::File,
+    ) -> Result<(), MdbookError> {
+        let skills_md_filename = format!("{overview_dirname}/skills.md");
+        let mut skills_md_file = std::fs::File::create(&skills_md_filename)?;
+
+        writeln!(skills_md_file, "# Operator Skills")?;
+        writeln!(skills_md_file, "")?;
+
+        let mut skills: Vec<&String> = self.skills.iter().collect();
+        skills.sort();
+        for skill in skills {
+            writeln!(skills_md_file, "* {skill}")?;
+        }
+
+        writeln!(summary_md_file, "    - [Skills](overview/skills.md)")?;
 
         Ok(())
     }

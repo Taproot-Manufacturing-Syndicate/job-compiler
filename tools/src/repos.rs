@@ -132,6 +132,18 @@ impl Repos {
         for (input_name, input_info) in recipe.inputs.iter() {
             let input_recipe = self.get_recipe(input_name)?;
 
+            if let Some(tools) = &recipe.dependencies.tools {
+                for tool in tools.iter() {
+                    build_plan.tools.insert(tool.clone());
+                }
+            }
+
+            if let Some(operator) = &recipe.dependencies.operator {
+                for skill in operator.skills.iter() {
+                    build_plan.skills.insert(skill.clone());
+                }
+            }
+
             if input_recipe.is_vitamin() {
                 match build_plan.bom.get_mut(input_name) {
                     Some(item) => {
