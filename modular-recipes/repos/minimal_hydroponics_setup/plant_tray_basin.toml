@@ -1,3 +1,6 @@
+[outputs]
+plant_tray_basin = { comment = "Alternatively use commercial plastic bus tubs." }
+
 [inputs]
 food_safe_5_gallon_bucket = {}
 
