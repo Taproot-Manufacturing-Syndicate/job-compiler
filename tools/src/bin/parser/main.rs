@@ -3,13 +3,25 @@ use clap::Parser;
 #[derive(Debug, clap::Parser)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// The name of the recipe to build.
-    target: String,
-
     /// Directories containing repos.
     #[arg(short, long)]
-    // repo: String,
     repo: Vec<String>,
+
+    /// Type of behavior/output.
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(clap::Subcommand, Debug)]
+enum Commands {
+    Mdbook {
+        /// The name of the recipe to create MD Book for.
+        target: String,
+    },
+    Info {
+        /// The name of the recipe to show info for.
+        target: String,
+    },
 }
 
 fn main() -> anyhow::Result<()> {
@@ -20,8 +32,16 @@ fn main() -> anyhow::Result<()> {
         repos.add_repo(repo_path)?;
     }
 
-    let build_plan = repos.compile(&args.target)?;
-    build_plan.make_mdbook()?;
+    match &args.command {
+        Commands::Mdbook { target } => {
+            let build_plan = repos.compile(target)?;
+            build_plan.make_mdbook()?;
+        }
+        Commands::Info { target } => {
+            let recipe = repos.get_recipe(target)?;
+            println!("{:#?}", recipe);
+        }
+    }
 
     Ok(())
 }
