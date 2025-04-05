@@ -14,8 +14,7 @@ struct Args {
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-    // let repo = tools::Repo::new(&args.repo).unwrap();
-    // repo.compile(&args.target)?;
+
     let mut repos = tools::Repos::default();
     for repo_path in &args.repo {
         repos.add_repo(repo_path)?;
