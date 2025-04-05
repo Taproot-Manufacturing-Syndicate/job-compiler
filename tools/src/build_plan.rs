@@ -215,6 +215,8 @@ impl<'a> BuildPlan<'a> {
         writeln!(bom_md_file, "# Bill of materials")?;
         writeln!(bom_md_file, "")?;
 
+        let mut total_cost: f32 = 0.0;
+
         let mut names: Vec<&String> = self.bom.keys().collect();
         names.sort();
         for name in names {
@@ -226,13 +228,14 @@ impl<'a> BuildPlan<'a> {
                 )))?;
             let recipe = self.repos.get_recipe(name)?;
             let unit_cost = recipe.unit_cost()?;
-            let total_cost = unit_cost * item.quantity.amount;
+            let item_total_cost = unit_cost * item.quantity.amount;
+            total_cost += item_total_cost;
             writeln!(bom_md_file, "* {name}")?;
             writeln!(bom_md_file, "    * quantity {:?}", item.quantity)?;
             writeln!(
                 bom_md_file,
                 "    * cost {:.2} ({:.2} each)",
-                total_cost, unit_cost
+                item_total_cost, unit_cost
             )?;
             writeln!(bom_md_file, "    * vendors:")?;
             match &recipe.action {
@@ -249,6 +252,9 @@ impl<'a> BuildPlan<'a> {
                 }
             }
         }
+
+        writeln!(bom_md_file, "")?;
+        writeln!(bom_md_file, "Total cost: {:.2}", total_cost)?;
 
         writeln!(
             summary_md_file,
