@@ -8,12 +8,17 @@ food_safe_5_gallon_bucket = {}
 tools = [ "hack saw", "step drill correct size for both barb fittings" ]
 
 [action]
-process = """* Cut the top of the bucket off, leaving a kind of deep dish
-or bowl that will holds the plant growth medium and the plants.  It should
-extend a couple of inches above the top of the grow medium and net pots,
-and above the top of the overflow valve.  In fact, it might be good if
-the plant tray basin is big enough to hold *all* the nutrient solution.
+process = """
 
 * Drill holes for the two fittings.  The holes should be pretty close
 together, but far enough apart that there's sufficient room for the nuts
-that compress the barb fitting gaskets."""
+that compress the barb fitting gaskets.
+
+* Temporarily install the overflow fitting, and mark the wall of the
+bucket a few inches above the top of the overflow fitting.
+
+* Cut the top of the bucket off at the mark.  This leaves a kind of deep
+dish or bowl that will holds the plant growth medium and the plants.
+a few inches above the top of the overflow fitting.
+
+"""
