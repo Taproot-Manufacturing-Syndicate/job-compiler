@@ -1,0 +1,11 @@
+[inputs]
+capital = { quantity = { amount=0.97, unit="USDollar" } }
+
+[dependencies]
+operator = {skills=["vendor interaction"]}
+
+[action.purchase]
+vendor = [
+    "https://acmehydroponics.net/collections/plumbing/products/extension-fitting-plumbing",
+    "https://www.ebay.com/itm/256644065109"
+]

@@ -1,0 +1,12 @@
+[inputs]
+barb_fitting_1_inch = {}
+riser = { quantity = { amount = 2 } }
+filter = {}
+
+[dependencies]
+operator = {skills=["assembly"]}
+
+[action]
+process = """
+Attach the risers and filter to the barb fitting.
+"""

@@ -1,13 +1,15 @@
 [inputs]
 plant_tray_basin = {}
 clay_pebble_grow_medium = { quantity = { amount=5, unit="Liter" } }
-barb_fitting_1_inch = {}
-barb_fitting_1_2_inch = {}
+pump_fitting = {}
+overflow_fitting = {}
 
 [dependencies]
 tools = [ "hack saw" ]
 
 [action]
-process = """Attach the two fittings.
-
-Add the grow medium."""
+process = """
+* Attach the pump fitting.
+* Attach the overflow fitting.
+* Add the grow medium.
+"""

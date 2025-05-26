@@ -1,0 +1,11 @@
+[inputs]
+barb_fitting_1_2_inch = {}
+filter = {}
+
+[dependencies]
+operator = {skills=["assembly"]}
+
+[action]
+process = """
+Attach the filter to the barb fitting.
+"""
