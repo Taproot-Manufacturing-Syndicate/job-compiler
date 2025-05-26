@@ -1,10 +1,11 @@
 [inputs]
-capital = { quantity = { amount=15.19, unit="USDollar" } }
+capital = { quantity = { amount=2.49, unit="USDollar" } }
 
 [dependencies]
 operator = {skills=["vendor interaction"]}
 
 [action.purchase]
 vendor = [
-    "https://www.botanicare.com/products/fittings/"
+    "https://www.botanicare.com/products/fittings/",
+    "https://acmehydroponics.net/collections/plumbing/products/fill-drain-1-fitting"
 ]
