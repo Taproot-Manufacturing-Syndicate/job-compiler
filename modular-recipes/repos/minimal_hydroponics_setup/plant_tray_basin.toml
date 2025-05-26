@@ -5,10 +5,15 @@ plant_tray_basin = { comment = "Alternatively use commercial plastic bus tubs." 
 food_safe_5_gallon_bucket = {}
 
 [dependencies]
-tools = [ "hack saw", "step drill" ]
+tools = [ "hack saw", "step drill correct size for both barb fittings" ]
 
 [action]
 process = """* Cut the top of the bucket off, leaving a kind of deep dish
-or bowl that will holds the plant growth medium and the plants.
+or bowl that will holds the plant growth medium and the plants.  It should
+extend a couple of inches above the top of the grow medium and net pots,
+and above the top of the overflow valve.  In fact, it might be good if
+the plant tray basin is big enough to hold *all* the nutrient solution.
 
-* Drill holes for the two fittings."""
+* Drill holes for the two fittings.  The holes should be pretty close
+together, but far enough apart that there's sufficient room for the nuts
+that compress the barb fitting gaskets."""
