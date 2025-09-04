@@ -3,7 +3,7 @@ use clap::Parser;
 #[derive(Debug, clap::Parser)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Directories containing repos.
+    /// Directories containing repos, eg "../my-repos".
     #[arg(short, long)]
     repo: Vec<String>,
 
@@ -14,12 +14,14 @@ struct Args {
 
 #[derive(clap::Subcommand, Debug)]
 enum Commands {
+    /// Produce an mdbook of the specified recipe.
     Mdbook {
-        /// The name of the recipe to create MD Book for.
+        /// The name of the recipe to create MD Book for, eg "my_widget".
         target: String,
     },
+    /// Show parsed recipe, probably not very useful.
     Info {
-        /// The name of the recipe to show info for.
+        /// The name of the recipe to show info for, eg "my_widget".
         target: String,
     },
 }
