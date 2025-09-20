@@ -1,0 +1,13 @@
+teach repos to depend on other repos
+
+This is analogous to how rust crates have a Cargo.toml that lists
+dependencies on other crates.
+
+For example, a repo could have a repo.toml (?) that says something like:
+```
+[dependencies]
+metric_fasteners = { git="https://github.com/taproot/metric_fasteners.git", version="1.0" }
+```
+
+This would be instead of running the job-compiler tool with a bunch of
+`--repo PATH` arguments to local repos.
