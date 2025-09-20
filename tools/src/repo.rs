@@ -5,7 +5,7 @@ use crate::recipe::Recipe;
 
 #[derive(Debug)]
 pub struct Repo {
-    _path: String,
+    _path: std::path::PathBuf,
     recipes: std::collections::HashMap<String, Recipe>,
 }
 
@@ -18,7 +18,7 @@ pub enum RepoLoadError {
 impl Repo {
     pub fn new(path: &str) -> Result<Self, RepoLoadError> {
         let mut repo = Self {
-            _path: std::string::String::from(path),
+            _path: std::fs::canonicalize(std::path::PathBuf::from(path))?,
             recipes: std::collections::HashMap::<String, Recipe>::new(),
         };
         repo.add_dir(path)?;
