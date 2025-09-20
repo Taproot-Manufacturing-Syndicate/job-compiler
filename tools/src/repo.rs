@@ -7,7 +7,7 @@ use crate::recipe::Recipe;
 pub struct Repo {
     /// Canonical absolute path in the local filesystem where this repo
     /// is available.
-    _path: std::path::PathBuf,
+    path: std::path::PathBuf,
 
     /// Parsed versions of all Recipes in this repo.
     recipes: std::collections::HashMap<String, Recipe>,
@@ -22,7 +22,7 @@ pub enum RepoLoadError {
 impl Repo {
     pub fn new(path: &str) -> Result<Self, RepoLoadError> {
         let mut repo = Self {
-            _path: std::fs::canonicalize(std::path::PathBuf::from(path))?,
+            path: std::fs::canonicalize(std::path::PathBuf::from(path))?,
             recipes: std::collections::HashMap::<String, Recipe>::new(),
         };
         repo.add_dir(path)?;
@@ -31,6 +31,10 @@ impl Repo {
 
     pub fn get_recipe(&self, recipe_name: &str) -> Option<&Recipe> {
         self.recipes.get(recipe_name)
+    }
+
+    pub fn get_path(&self) -> &std::path::PathBuf {
+        &self.path
     }
 
     pub fn compile(&self, target: &str) -> anyhow::Result<()> {
