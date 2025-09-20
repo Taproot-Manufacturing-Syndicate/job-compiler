@@ -6,6 +6,8 @@ falls off pretty rapidly for the smaller pumps.
 The 160 GPH and 250 GPH both use 1/2 inch tubing, so i'll try one of
 those, easy to switch to the other one if the first one's no good."""
 
+image = "active-aqua-160-gph.png"
+
 [inputs]
 capital={quantity={amount=21.69, unit="USDollar"}}
 
