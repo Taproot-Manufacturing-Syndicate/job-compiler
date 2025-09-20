@@ -1,0 +1,9 @@
+distinguish better between Recipe and Item
+
+We currently pretty much just have Recipe as our core data structure,
+but it also kind of acts as our Item struct.
+
+In reality each Recipe produces one item as its output, which has the
+same name as the Recipe file.
+
+build_plan has a defective beginning of `struct Item`.
