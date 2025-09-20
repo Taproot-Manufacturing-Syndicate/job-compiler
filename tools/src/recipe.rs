@@ -30,6 +30,7 @@ pub struct Output {
     // Quantity defaults to "amount=1" if omitted.
     #[serde(default)]
     pub quantity: Quantity,
+    pub image: Option<String>,
 }
 
 #[derive(Debug, serde::Deserialize, PartialEq)]
@@ -92,6 +93,7 @@ impl Recipe {
                 let key = recipe_name.to_string_lossy().into_owned();
                 let value = Output {
                     quantity: Quantity::default(),
+                    image: None,
                 };
                 outputs.insert(key, value);
                 recipe.outputs = Some(outputs);
