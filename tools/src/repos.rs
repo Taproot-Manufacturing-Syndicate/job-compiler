@@ -56,6 +56,8 @@ pub enum RecipeCompileError {
     InputProducesNoOutput(String),
     #[error(transparent)]
     VitaminError(#[from] crate::recipe::VitaminError),
+    #[error(transparent)]
+    RecipeIdParseError(#[from] crate::recipe_id::RecipeIdParseError),
 }
 
 impl Repos {
@@ -94,6 +96,32 @@ impl Repos {
                 for (_repo_name, repo) in self.repos.iter() {
                     if let Some(recipe) = repo.get_recipe(recipe_name) {
                         return Ok(recipe);
+                    }
+                }
+                Err(RecipeLookupError::RecipeNotFound(recipe_name.into()))
+            }
+        }
+    }
+
+    /// Return a canonical absolute PathBuf to the directory containing
+    /// the file describing the specified recipe.
+    pub fn get_recipe_path(
+        &self,
+        recipe_name: &str,
+    ) -> Result<std::path::PathBuf, RecipeLookupError> {
+        let recipe_id = RecipeId::from_str(recipe_name)?;
+        match recipe_id.repo {
+            Some(repo) => {
+                let repo = self
+                    .repos
+                    .get(&repo)
+                    .ok_or(RecipeLookupError::RepoNotFound(repo))?;
+                Ok(std::path::PathBuf::from(repo.get_path()))
+            }
+            None => {
+                for (_repo_name, repo) in self.repos.iter() {
+                    if repo.get_recipe(recipe_name).is_some() {
+                        return Ok(std::path::PathBuf::from(repo.get_path()));
                     }
                 }
                 Err(RecipeLookupError::RecipeNotFound(recipe_name.into()))
@@ -155,6 +183,7 @@ impl Repos {
                                 amount: quantity as f32,
                                 unit: None,
                             },
+                            image: None, // FIXME
                         },
                     );
                 }
@@ -170,13 +199,21 @@ impl Repos {
                         item.quantity = item.quantity + &(input_info.quantity * quantity);
                     }
                     None => {
-                        build_plan.bom.insert(
-                            input_name.clone(),
-                            crate::build_plan::Item {
-                                name: input_name.clone(),
-                                quantity: input_info.quantity * quantity,
-                            },
-                        );
+                        let mut item = crate::build_plan::Item {
+                            name: input_name.clone(),
+                            quantity: input_info.quantity * quantity,
+                            image: None, // We fill this out if we can, just below.
+                        };
+                        if let Some(outputs) = &input_recipe.outputs {
+                            if let Some(output) = outputs.get(input_name) {
+                                if let Some(image_filename) = &output.image {
+                                    let mut path = self.get_recipe_path(input_name)?;
+                                    path.push(image_filename);
+                                    item.image = Some(path);
+                                }
+                            }
+                        }
+                        build_plan.bom.insert(input_name.clone(), item);
                     }
                 }
             }

@@ -36,6 +36,7 @@ pub enum MdbookError {
 pub struct Item {
     pub name: String,
     pub quantity: Quantity,
+    pub image: Option<std::path::PathBuf>,
 }
 
 #[derive(Debug)]
@@ -231,6 +232,18 @@ impl<'a> BuildPlan<'a> {
             let item_total_cost = unit_cost * item.quantity.amount;
             total_cost += item_total_cost;
             writeln!(bom_md_file, "* {name}")?;
+            if let Some(source_image_path) = &item.image {
+                if let Some(image_filename) = source_image_path.file_name() {
+                    writeln!(
+                        bom_md_file,
+                        "    * ![image of {name}]({})",
+                        image_filename.to_string_lossy()
+                    )?;
+                    let mut dest_image_path = std::path::PathBuf::from(overview_dirname);
+                    dest_image_path.push(image_filename);
+                    std::fs::copy(source_image_path, dest_image_path)?;
+                }
+            }
             writeln!(bom_md_file, "    * quantity {:?}", item.quantity)?;
             writeln!(
                 bom_md_file,
