@@ -5,7 +5,11 @@ use crate::recipe::Recipe;
 
 #[derive(Debug)]
 pub struct Repo {
+    /// Canonical absolute path in the local filesystem where this repo
+    /// is available.
     _path: std::path::PathBuf,
+
+    /// Parsed versions of all Recipes in this repo.
     recipes: std::collections::HashMap<String, Recipe>,
 }
 
