@@ -5,14 +5,19 @@ plant_tray_basin = { comment = "Alternatively use commercial plastic bus tubs." 
 food_safe_5_gallon_bucket = {}
 
 [dependencies]
-tools = [ "hack saw", "35mm hole saw (this is the correct size for both barb fittings)" ]
+tools = [ "hacksaw", "35mm hole saw (this is the correct size for both barb fittings)" ]
 
 [action]
 process = """
+* Find good locations for the two barb fittings (for the pump and the
+drain). The fittings should be near the edge of the `plant_tray_basin`
+and pretty close together, but far enough apart that there's room for the
+nuts on the underside that compress the barb fitting gaskets against the
+`plant_tray_basin` floor.
 
-* Drill holes for the two fittings.  The holes should be pretty close
-together, but far enough apart that there's sufficient room for the nuts
-that compress the barb fitting gaskets.
+* Mark the locations of the holes.
+
+* Drill holes for the two fittings.
 
 * Temporarily install the overflow fitting, and mark the wall of the
 bucket a few inches above the top of the overflow fitting.
