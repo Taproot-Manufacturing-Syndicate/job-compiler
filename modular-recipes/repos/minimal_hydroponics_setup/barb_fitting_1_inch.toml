@@ -1,3 +1,6 @@
+[outputs.barb_fitting_1_inch]
+image = "barb_fitting_1_inch.webp"
+
 [inputs]
 capital = { quantity = { amount=2.49, unit="USDollar" } }
 
@@ -6,6 +9,7 @@ operator = {skills=["vendor interaction"]}
 
 [action.purchase]
 vendor = [
+    "https://hydrobuilder.com/products/grow1-ebb-flow-fill-drain-fittings-1-inch-pack-of-10",
     "https://www.botanicare.com/products/fittings/",
     "https://acmehydroponics.net/collections/plumbing/products/fill-drain-1-fitting"
 ]

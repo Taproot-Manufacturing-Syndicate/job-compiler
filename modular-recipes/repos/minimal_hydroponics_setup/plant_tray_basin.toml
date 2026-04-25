@@ -5,7 +5,7 @@ plant_tray_basin = { comment = "Alternatively use commercial plastic bus tubs." 
 food_safe_5_gallon_bucket = {}
 
 [dependencies]
-tools = [ "hack saw", "step drill correct size for both barb fittings" ]
+tools = [ "hack saw", "35mm hole saw (this is the correct size for both barb fittings)" ]
 
 [action]
 process = """

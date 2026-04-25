@@ -1,3 +1,10 @@
+[outputs.riser]
+comments = """Grow1 Ebb & Flow Riser Extension Fitting.
+
+1" diameter riser - male threads on one side, female on the other."""
+
+image = "riser.webp"
+
 [inputs]
 capital = { quantity = { amount=0.97, unit="USDollar" } }
 
@@ -6,6 +13,7 @@ operator = {skills=["vendor interaction"]}
 
 [action.purchase]
 vendor = [
+    "https://hydrobuilder.com/products/grow1-ebb-flow-riser-extension-fittings-pack-of-10",
     "https://acmehydroponics.net/collections/plumbing/products/extension-fitting-plumbing",
     "https://www.ebay.com/itm/256644065109"
 ]

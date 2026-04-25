@@ -1,3 +1,6 @@
+[outputs.barb_fitting_1_2_inch]
+image = "barb_fitting_1_2_inch.webp"
+
 [inputs]
 capital = { quantity = { amount=2.59, unit="USDollar" } }
 
@@ -6,6 +9,7 @@ operator = {skills=["vendor interaction"]}
 
 [action.purchase]
 vendor = [
+    "https://hydrobuilder.com/products/grow1-ebb-flow-riser-extension-fittings-pack-of-10",
     "https://acmehydroponics.net/collections/plumbing/products/fill-drain-1-2-fitting",
     "https://www.ebay.com/itm/134772441988",
     "https://www.ebay.com/itm/251050375775?var=554293415440",
