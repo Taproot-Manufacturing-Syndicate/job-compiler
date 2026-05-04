@@ -31,6 +31,7 @@ pub struct Output {
     #[serde(default)]
     pub quantity: Quantity,
     pub image: Option<String>,
+    pub comment: Option<String>,
 }
 
 #[derive(Debug, serde::Deserialize, PartialEq)]
@@ -81,6 +82,12 @@ pub struct Recipe {
     /// section?  None of the recipes we've been doodling around with
     /// have anything like byproducts or waste streams...
     pub outputs: Option<std::collections::HashMap<String, Output>>,
+
+    /// The recipe file.
+    ///
+    /// FIXME: This should not be an Option, but we can't parse it out
+    /// of the file.
+    pub path: Option<std::path::PathBuf>,
 }
 
 impl Recipe {
@@ -94,11 +101,13 @@ impl Recipe {
                 let value = Output {
                     quantity: Quantity::default(),
                     image: None,
+                    comment: None,
                 };
                 outputs.insert(key, value);
                 recipe.outputs = Some(outputs);
             }
         }
+        recipe.path = Some(file.clone());
         recipe.validate_recipe()?;
         Ok(recipe)
     }

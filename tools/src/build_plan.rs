@@ -413,6 +413,32 @@ impl<'a> BuildPlan<'a> {
         let mut chapter_md_file = std::fs::File::create(&chapter_md_filename)?;
 
         writeln!(chapter_md_file, "# {recipe_name}")?;
+
+        if let Some(outputs) = &recipe.outputs {
+            for (name, output) in outputs {
+                if let Some(image) = &output.image {
+                    writeln!(chapter_md_file, "![]({image})")?;
+                    writeln!(chapter_md_file, "")?;
+
+                    if let Some(src_image_path) = &recipe.path {
+                        if let Some(src_image_path) = src_image_path.parent() {
+                            let mut src_image_path = std::path::PathBuf::from(src_image_path);
+                            src_image_path.push(image);
+
+                            let mut dest_image_path = std::path::PathBuf::from(mdbook_dir);
+                            dest_image_path.push("src");
+                            dest_image_path.push(image);
+
+                            std::fs::copy(src_image_path, dest_image_path)?;
+                        }
+                    }
+                }
+                if let Some(comment) = &output.comment {
+                    writeln!(chapter_md_file, "{comment}")?;
+                }
+            }
+        }
+
         writeln!(chapter_md_file, "")?;
 
         writeln!(chapter_md_file, "![]({recipe_name}_puml.png)")?;
