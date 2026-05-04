@@ -1,3 +1,6 @@
+[outputs.food_safe_5_gallon_bucket]
+image = "food_safe_5_gallon_bucket.png"
+
 [inputs]
 capital = { quantity = { amount=7.00, unit="USDollar" }}
 
