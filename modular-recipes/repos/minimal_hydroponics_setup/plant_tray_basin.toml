@@ -1,11 +1,12 @@
-[outputs]
-plant_tray_basin = { comment = "Alternatively use commercial plastic bus tubs." }
+[outputs.plant_tray_basin]
+comment = "Alternatively use commercial plastic bus tubs."
+image = "plant_tray_basin.jpg"
 
 [inputs]
 food_safe_5_gallon_bucket = {}
 
 [dependencies]
-tools = [ "hacksaw", "35mm hole saw (this is the correct size for both barb fittings)" ]
+tools = [ "hacksaw", "35mm hole saw (this is the correct size for both barb fittings)", "sandpaper (80-150 grit works well)" ]
 
 [action]
 process = """
@@ -13,16 +14,22 @@ process = """
 drain). The fittings should be near the edge of the `plant_tray_basin`
 and pretty close together, but far enough apart that there's room for the
 nuts on the underside that compress the barb fitting gaskets against the
-`plant_tray_basin` floor.
+`plant_tray_basin` floor. !()[plant_tray_basin-fixture-placement.jpg]
 
 * Mark the locations of the holes.
 
-* Drill holes for the two fittings.
+* Drill holes for the two fittings. Deburr with sandpaper so that the
+fittings will make a good seal.
 
 * Temporarily install the overflow fitting, and mark the wall of the
 bucket a few inches above the top of the overflow fitting.
 
-* Cut the top of the bucket off at the mark.  This leaves a kind of deep
-dish or bowl that will holds the plant growth medium and the plants.
+* Cut the top of the bucket off at the mark. Deburr the cut edge with
+sandpaper. Discard the top part, keep the bottom part.
+
+* Rinse the plastic bits off the `plant_tray_basin`.
+
+This makes a kind of deep dish or bowl that will holds the plant growth
+medium and the plants.
 
 """

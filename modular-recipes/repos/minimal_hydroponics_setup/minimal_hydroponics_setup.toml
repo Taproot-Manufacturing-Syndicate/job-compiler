@@ -4,7 +4,6 @@ plant_tray = {}
 nutrient_pump = {}
 grow_lights = {}
 tasmota_power_outlet = { quantity = { amount=2 } }
-hose_1_inch = { quantity = { amount=1, unit="Meter" } }
 hose_1_2_inch = { quantity = { amount=1, unit="Meter" } }
 nutrient_solution = { quantity = { amount=5, unit="Liter" } }
 controller = {}
@@ -13,16 +12,17 @@ controller = {}
 operator = { skills=["assembly"] }
 
 [action]
-process = """Position the plant tray above the nutrient reservoir.
+process = """
+- Put the pump in the nutrient reservoir.
 
-Put the pump in the nutrient reservoir.
-
-Use the 1/2 inch tubing to connect the 1/2 inch fitting on the plant
+- Use the 1/2 inch tubing to connect the 1/2 inch fitting on the plant
 tray to the pump outlet.
 
-Use the 1 inch tubing to connect the 1 inch fitting on the plant tray
-to the nutrient reservoir.
+- The 1 inch drain fitting has no tubing, the water just drops into the
+`nutrient_reservoir`.
 
-Mix the nutrient solution in the nutrient tank.
+- Set the plant tray on the nutrient reservoir lid.
 
-FIXME: Plant some plants etc??."""
+- Mix the nutrient solution in the nutrient tank.
+
+FIXME: Plant some plants etc??"""

@@ -11,5 +11,11 @@ pi_enclosure = {}
 operator = {skills=["vendor interaction"]}
 
 [action]
-process = """Flash the MicroSD card with Raspberry Pi OS Bookworm.
-Put everything together."""
+process = """
+* Flash the MicroSD card with a modern Raspberry Pi OS.
+* Connect all the pieces together.
+* Install Rust.
+* Build the repo at <https://github.com/Taproot-Manufacturing-Syndicate/hydroponics-controller>.
+* Make a JSON config file.
+* Add a systemd service to run the hydroponics-controller.
+"""
