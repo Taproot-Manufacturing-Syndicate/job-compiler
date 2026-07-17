@@ -1,5 +1,8 @@
 I had somewhat randomly picked 1 inch ID as the drain tube.  3/4 inch
-seems much more common, maybe i made a mistake.
+seems much more common, maybe i made a mistake. Actually for the minimal
+2-stacked-buckets setup we don't need a drain tube at all, just let
+the water return through the drain fitting and waterfall into the
+reservoir. This has the benefit that it aerates the nutrient solution.
 
 add mesh baskets as an input to the plant tray
 
@@ -17,3 +20,7 @@ a spare bucket is not strictly needed but occasionally useful
 measuring cups for nutrient solution, 5-50 mL is about right
 
 how to group the fittings together into a kit?  <https://hydrobuilder.com/products/grow1-ebb-flow-kit?pr_prod_strat=e5_desc&pr_rec_id=95138f62a&pr_rec_pid=9876052771094&pr_ref_pid=9876054933782&pr_seq=uniform>
+
+It can be hard to attach/remove the flood hose (& drain hose, if used)
+to the fittings on the bottom of the plant tray. This makes it awkward
+to disassemble the system for cleaning when needed.
